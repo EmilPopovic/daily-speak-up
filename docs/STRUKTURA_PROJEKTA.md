@@ -36,9 +36,13 @@ Ovaj dokument opisuje inicijalnu strukturu projekta. Ostala dokumentacija može 
 │   ├── tsconfig.json
 │   ├── tsconfig.node.json
 │   └── vite.config.ts
+├── scripts
+│   ├── install.sh
+│   └── setup.sh
 ├── .github
-│   └── workflows
-│       └── placeholder.yml
+│   ├── workflows
+│   │   └── placeholder.yml
+│   └── CODEOWNERS
 ├── .vscode
 │   └── extensions.json
 ├── .gitignore
@@ -156,6 +160,7 @@ Datoteku stvara automatski inicijalizacijski postupak Vue.js projekta te nije mi
 Dostupne `make` naredbe:
 
 - **`make setup`** - Osigurava da je sve potrebno instalirano, provjerava verzije i postavlja Python virtualno okruženje.
+- **`make install`** - Postavlja Python virtualno okruženje, instalira Python i Node dependencies
 - **`make backend`** - Pokreće backend FastAPI aplikaciju (koristeći Uvicorn server i objekt `app` iz modula `src.main`) na portu `8123`
 - **`make frontend`** - Pokreće Vite server frontenda na portu `5173`
 - **`make dev`** - Pokreće backend i frontend istovremeno

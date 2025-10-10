@@ -9,7 +9,7 @@ dev:
 	make frontend
 
 backend:
-	echo "hello"
+	.venv/bin/python -m uvicorn backend.src.main:app --host 0.0.0.0 --port 8123
 
 frontend:
 	cd frontend && npm run dev
