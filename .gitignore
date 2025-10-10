@@ -1,0 +1,9 @@
+# Ignore Python virtual environment and local cache
+.venv/
+__pycache__/
+
+# Ignore env files, except templates
+.env
+.env.*
+!.env.template
+!.env.example
