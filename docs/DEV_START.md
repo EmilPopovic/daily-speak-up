@@ -7,16 +7,16 @@ Ovo je vodič za postavljanje razvojnog okruženja. Ove upute podržavaju **Linu
 
 ---
 
-## Brzi početak (za iskusne korisnike)
+## Quickstart
 
-Ako već imate sve preduvjete instalirane:
+Ako su svi preduvjeti instalirani:
 
 ```bash
 # Klonirajte repozitorij
 git clone git@github.com:EmilPopovic/progi-2025-8.1.git progi
 cd progi
 
-# Instalirajte dependencies projekta
+# (u Linux terminalu) Instalirajte dependencies projekta
 make install
 
 # Pokrenite razvojnu aplikaciju
@@ -27,7 +27,7 @@ make dev
 
 ## Postavljanje od nule
 
-### Korak 1: Preduvjeti specifični za platformu
+### Korak 1: Specifično za platformu
 
 Odaberite svoj operacijski sustav:
 
@@ -174,7 +174,7 @@ bash scripts/setup.sh
 Skripta će:
 
 1. Provjeriti koji alati su već instalirani
-2. Zatražiti vašu potvrdu prije instalacije bilo čega
+2. Zatražiti potvrdu prije instalacije bilo čega
 3. Instalirati alate koji nedostaju (zahtijeva `sudo` lozinku)
 4. Kreirati Python virtualno okruženje
 5. Instalirati sve dependencies projekta (Python paketi i npm paketi)
