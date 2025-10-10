@@ -1,0 +1,38 @@
+{
+  "recommendations": [
+    // Python & FastAPI
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "ms-python.isort",
+    
+    // Vue.js
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
+    
+    // JavaScript/TypeScript
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    
+    // Docker
+    "ms-azuretools.vscode-docker",
+    
+    // Jinja Templates
+    "wholroyd.jinja",
+    "samuelcolvin.jinjahtml",
+    
+    // HTML/CSS
+    "ecmel.vscode-html-css",
+    
+    // General Development
+    "editorconfig.editorconfig",
+    
+    // Git
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    
+    // Additional Utilities
+    "yzhang.markdown-all-in-one",
+    "christian-kohler.path-intellisense"
+  ]
+}
