@@ -13,7 +13,7 @@ Ako su svi preduvjeti instalirani:
 
 ```bash
 # Klonirajte repozitorij
-git clone git@github.com:EmilPopovic/daily-speak-up.git progi
+git clone git@github.com:progi-2025-g8-1/daily-speak-up.git progi
 cd progi
 
 # (u Linux terminalu) Instalirajte dependencies projekta
@@ -136,7 +136,7 @@ mkdir -p ~/repos
 cd ~/repos
 
 # Klonirajte repozitorij
-git clone https://github.com/EmilPopovic/daily-speak-up.git progi
+git clone git@github.com:progi-2025-g8-1/daily-speak-up.git progi
 cd progi
 ```
 
