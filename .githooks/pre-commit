@@ -1,0 +1,17 @@
+#!/bin/bash
+
+EMAIL=$(git config user.email)
+DOMAIN="${EMAIL##*@}"
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+RESET='\033[0m'
+
+if [[ "$DOMAIN" != "fer.hr" && "$DOMAIN" != "fer.unizg.hr" ]]; then
+    echo -e "${RED}[ERROR] Invalid email: $EMAIL${RESET}"
+    echo -e "${YELLOW}Repository requires email domain: @fer.hr or @fer.unizg.hr${RESET}"
+    echo -e "${YELLOW}Run: git config user.email \"yourname@fer.unizg.hr\"${RESET}"
+    exit 1
+fi
+
+exit 0
