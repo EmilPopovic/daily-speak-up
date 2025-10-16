@@ -2,7 +2,7 @@
 
 ## Opis projekta
 
-Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu.
+Ovaj projekt je rezultat timskog rada u sklopu projektnog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu.
 
 U današnjem poslovnom i akademskom okruženju, sposobnost jasnog i uvjerljivog izražavanja ključna je kompetencija. Mnogi studenti i profesionalci suočavaju se s poteškoćama u javnom govoru, prezentacijama i spontanoj komunikaciji. Postojeća rješenja često zahtijevaju mentore ili skupu obuku, a self-paced alati nisu dovoljno strukturirani.
 
@@ -10,13 +10,13 @@ DailySpeakUp pruža pristupačno, gamificirano rješenje koje omogućava svakodn
 
 ## Članovi tima 
 
-* [Emil Popović](https://github.com/orgs/progi-2025-g8-1/people/EmilPopovic) - voditelj, arhitektura, backend
-* [Matej Jurasić](https://github.com/orgs/progi-2025-g8-1/people/cappig) - backend, testiranje
-* [Lara Brečić](https://github.com/orgs/progi-2025-g8-1/people/Lara7260) - frontend
-* [Mate Jakovljev](https://github.com/orgs/progi-2025-g8-1/people/mate7589) - frontend
-* [Kristijan Bilanović](https://github.com/orgs/progi-2025-g8-1/people/KristijanBilanovic) - frontend, testiranje
-* [Lara Desnica](https://github.com/orgs/progi-2025-g8-1/people/LaraDesnica) - dokumentacije
-* [Nika Valić](https://github.com/orgs/progi-2025-g8-1/people/wavetoc520) - UI/UX
+* [Emil Popović](https://github.com/EmilPopovic) - voditelj, arhitektura, backend
+* [Matej Jurasić](https://github.com/cappig) - backend, testiranje
+* [Lara Brečić](https://github.com/Lara7260) - frontend
+* [Mate Jakovljev](https://github.com/mate7589) - frontend
+* [Kristijan Bilanović](https://github.com/KristijanBilanovic) - frontend, testiranje
+* [Lara Desnica](https://github.com/LaraDesnica) - dokumentacije
+* [Nika Valić](https://github.com/wavetoc520) - UI/UX
 
 ## Tehnologije
 
@@ -35,6 +35,6 @@ DailySpeakUp pruža pristupačno, gamificirano rješenje koje omogućava svakodn
 * Video pohrana: [Cloudflare R2](https://www.cloudflare.com/products/r2/)
 * Email usluge: [Resend](https://resend.com/)
 
-## Instalcija
+## Instalacija
 
 > !TODO
