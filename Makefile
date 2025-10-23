@@ -4,6 +4,12 @@ setup:
 install:
 	@bash scripts/install.sh
 
+pip:
+	.venv/bin/pip install -r backend/requirements.txt
+
+npm:
+	cd frontend && npm install && cd ..
+
 dev:
 	make backend &
 	make frontend
@@ -17,4 +23,4 @@ frontend:
 test:
 	echo "Test test 1 2 3..."
 
-.PHONY: setup install dev backend frontend test
+.PHONY: setup install pip dev backend frontend test
