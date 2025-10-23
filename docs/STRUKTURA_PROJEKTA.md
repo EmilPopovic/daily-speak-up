@@ -161,6 +161,8 @@ Dostupne `make` naredbe:
 
 - **`make setup`** - Osigurava da je sve potrebno instalirano, provjerava verzije i postavlja Python virtualno okruženje.
 - **`make install`** - Postavlja Python virtualno okruženje, instalira Python i Node dependencies
+- **`make pip`** - Instalira Python dependencies (radi `pip install`)
+- **`make npm`** - Instalira Node dependencies (radi `npm install`)
 - **`make backend`** - Pokreće backend FastAPI aplikaciju (koristeći Uvicorn server i objekt `app` iz modula `src.main`) na portu `8123`
 - **`make frontend`** - Pokreće Vite server frontenda na portu `5173`
 - **`make dev`** - Pokreće backend i frontend istovremeno
