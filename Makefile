@@ -23,4 +23,20 @@ frontend:
 test:
 	echo "Test test 1 2 3..."
 
-.PHONY: setup install pip dev backend frontend test
+create-db:
+	@echo "Creating database tables..."
+	.venv/bin/python -m backend.src.db_manager create
+
+reset-db:
+	@echo "Resetting database (this will delete all data)..."
+	.venv/bin/python -m backend.src.db_manager reset
+
+reset-db-force:
+	@echo "Force resetting database..."
+	.venv/bin/python -m backend.src.db_manager reset --force
+
+drop-db:
+	@echo "Dropping all database tables..."
+	.venv/bin/python -m backend.src.db_manager drop
+
+.PHONY: setup install pip dev backend frontend test create-db reset-db reset-db-force drop-db

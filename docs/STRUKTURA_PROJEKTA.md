@@ -167,3 +167,7 @@ Dostupne `make` naredbe:
 - **`make frontend`** - Pokreće Vite server frontenda na portu `5173`
 - **`make dev`** - Pokreće backend i frontend istovremeno
 - **`make test`** - Pokreće testove (trenutno ispisuje tekst u konzolu)
+- **`make create-db`** - Kreira sve tablice u bazi na `DATABASE_URL`
+- **`make drop-db`** - Briše sve tablica u bazi na `DATABASE_URL`, **ne traži potvrdu**
+- **`make reset-db`** - Briše sve tablice u bazi na `DATABASE_URL` i kreira nove, traži potvrdu
+- **`make reset-db-force`** - Briše sve tablice u bazi na `DATABASE_URL` i kreira nove, **ne traži potvrdu**
