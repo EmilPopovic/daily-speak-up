@@ -10,7 +10,7 @@ from ...db import engine
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=['health'], prefix='/health')
 
-@router.get('/')
+@router.get('')
 async def health():
     """Basic health check (returns 200 OK)"""
     return JSONResponse(
