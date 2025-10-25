@@ -62,3 +62,19 @@ class Ban(Base):
         ForeignKey('reports.id'),
         nullable=True
     )
+
+    # Relationships
+    banned_user: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[user_id],
+        back_populates='bans_received',
+    )
+    banner: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[banned_by],
+        back_populates='bans_issued',
+    )
+    report: Mapped[Optional[Report]] = relationship(
+        'Report',
+        back_populates='bans',
+    )

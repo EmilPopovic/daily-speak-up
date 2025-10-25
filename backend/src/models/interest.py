@@ -47,3 +47,13 @@ class Interest(Base):
         nullable=False,
         unique=True,
     )
+
+    # Relationships
+    user_interests: Mapped[List[UserInterest]] = relationship(
+        'UserInterest',
+        back_populates='interest',
+    )
+    speeches: Mapped[List[Speech]] = relationship(
+        'Speech',
+        back_populates='interest',
+    )

@@ -88,3 +88,27 @@ class Speech(Base):
         ForeignKey('users.id'),
         nullable=True,
     )
+
+    # Relationships
+    user: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[user_id],
+        back_populates='speeches',
+    )
+    deleter: Mapped[Optional[User]] = relationship(
+        'User',
+        foreign_keys=[deleted_by],
+        back_populates='deleted_speeches',
+    )
+    interest: Mapped[Optional[Interest]] = relationship(
+        'Interest',
+        back_populates='speeches',
+    )
+    reports: Mapped[List[Report]] = relationship(
+        'Report',
+        back_populates='speech',
+    )
+    ratings: Mapped[List[Rating]] = relationship(
+        'Rating',
+        back_populates='speech',
+    )

@@ -144,3 +144,93 @@ class User(Base):
         default=True,
         nullable=False,
     )
+
+    # Relationships
+    preferred_language: Mapped[AppLanguage] = relationship(
+        'AppLanguage',
+        back_populates='users',
+    )
+
+    devices: Mapped[List[UserDevice]] = relationship(
+        'UserDevice',
+        back_populates='user',
+    )
+
+    # Friendships where this user is user_id1
+    friendships_as_user1: Mapped[List[Friendship]] = relationship(
+        'Friendship',
+        foreign_keys='Friendship.user_id1',
+        back_populates='user1',
+    )
+
+    # Friendships where this user is user_id2
+    friendships_as_user2: Mapped[List[Friendship]] = relationship(
+        'Friendship',
+        foreign_keys='Friendship.user_id2',
+        back_populates='user2',
+    )
+
+    # Friend requests initiated by this user
+    requested_friendships: Mapped[List[Friendship]] = relationship(
+        'Friendship',
+        foreign_keys='Friendship.requested_by_id',
+        back_populates='requester',
+    )
+
+    # Friendships deleted by this user
+    deleted_friendships: Mapped[List[Friendship]] = relationship(
+        'Friendship',
+        foreign_keys='Friendship.deleted_by',
+        back_populates='deleter',
+    )
+
+    streaks: Mapped[List[UserStreak]] = relationship(
+        'UserStreak',
+        back_populates='user',
+    )
+
+    user_interests: Mapped[List[UserInterest]] = relationship(
+        'UserInterest',
+        back_populates='user',
+    )
+
+    speeches: Mapped[List[Speech]] = relationship(
+        'Speech',
+        foreign_keys='Speech.user_id',
+        back_populates='user',
+    )
+
+    deleted_speeches: Mapped[List[Speech]] = relationship(
+        'Speech',
+        foreign_keys='Speech.deleted_by',
+        back_populates='deleter',
+    )
+
+    reports: Mapped[List[Report]] = relationship(
+        'Report',
+        foreign_keys='Report.reported_by',
+        back_populates='reporter',
+    )
+
+    resolved_reports: Mapped[List[Report]] = relationship(
+        'Report',
+        foreign_keys='Report.resolved_by',
+        back_populates='resolver',
+    )
+
+    ratings: Mapped[List[Rating]] = relationship(
+        'Rating',
+        back_populates='rater',
+    )
+
+    bans_received: Mapped[List[Ban]] = relationship(
+        'Ban',
+        foreign_keys='Ban.user_id',
+        back_populates='banned_user',
+    )
+
+    bans_issued: Mapped[List[Ban]] = relationship(
+        'Ban',
+        foreign_keys='Ban.banned_by',
+        back_populates='banner',
+    )

@@ -66,3 +66,13 @@ class Rating(Base):
         DateTime(timezone=True),
         nullable=True,
     )
+
+    # Relationship
+    speech: Mapped[Speech] = relationship(
+        'Speech',
+        back_populates='ratings',
+    )
+    rater: Mapped[User] = relationship(
+        'User',
+        back_populates='ratings',
+    )

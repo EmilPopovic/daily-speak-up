@@ -49,3 +49,13 @@ class UserInterest(Base):
         DateTime(timezone=True),
         nullable=True,
     )
+
+    # Relationships
+    user: Mapped[User] = relationship(
+        'User',
+        back_populates='user_interests',
+    )
+    interest: Mapped[Interest] = relationship(
+        'Interest',
+        back_populates='user_interests',
+    )

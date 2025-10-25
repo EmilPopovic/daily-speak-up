@@ -50,3 +50,9 @@ class UserDevice(Base):
         default=lambda: datetime.datetime.now(datetime.timezone.utc),
         nullable=False,
     )
+
+    # Relationships
+    user: Mapped[User] = relationship(
+        'User',
+        back_populates='devices',
+    )

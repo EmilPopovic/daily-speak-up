@@ -74,3 +74,23 @@ class Report(Base):
         default=ResolutionAction.PENDING,
         nullable=False,
     )
+
+    # Relationships
+    speech: Mapped[Speech] = relationship(
+        'Speech',
+        back_populates='reports',
+    )
+    repoter: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[reported_by],
+        back_populates='reports',
+    )
+    resolver: Mapped[Optional[User]] = relationship(
+        'User',
+        foreign_keys=[resolved_by],
+        back_populates='resolved_reports',
+    )
+    bans: Mapped[List[Ban]] = relationship(
+        'Ban',
+        back_populates='report',
+    )

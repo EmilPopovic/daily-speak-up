@@ -60,3 +60,9 @@ class UserStreak(Base):
         DateTime(timezone=True),
         nullable=True
     )
+    
+    # Relationships
+    user: Mapped[User] = relationship(
+        'User',
+        back_populates='streaks',
+    )

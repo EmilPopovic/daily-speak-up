@@ -92,3 +92,25 @@ class Friendship(Base):
         ForeignKey('users.id'),
         nullable=True,
     )
+
+    # Relationships
+    user1: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[user_id1],
+        back_populates='friendships_as_user1',
+    )
+    user2: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[user_id2],
+        back_populates='friendships_as_user2',
+    )
+    requester: Mapped[User] = relationship(
+        'User',
+        foreign_keys=[requested_by_id],
+        back_populates='requested_friendships',
+    )
+    deleter: Mapped[Optional[User]] = relationship(
+        'User',
+        foreign_keys=[deleted_by],
+        back_populates='deleted_friendships'
+    )
