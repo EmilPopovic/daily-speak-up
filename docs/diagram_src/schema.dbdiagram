@@ -1,0 +1,195 @@
+Enum app_theme {
+  system
+  light
+  dark
+}
+
+Enum user_role {
+  user
+  mod
+  admin
+}
+
+Table app_languages {
+  ~id
+  ~created_at
+  slug text [not null, unique]
+  display_name text [not null, unique]
+}
+
+Enum onboarding_status {
+  pending
+  profile_customization
+  interests_selection
+  completed
+}
+
+Table users {
+  ~id
+  ~created_at
+
+  role user_role [not null]
+  
+  auth0_user_id text [not null]
+
+  email text [not null, unique]
+  email_changed_at timestamp [default: null]
+  
+  display_name text [not null]
+  display_name_changed_at timestamp [default: null]
+
+  handle text [not null, unique]
+  handle_changed_at timestamp [default: null]
+
+  profile_picture_url text [default: null]
+  profile_picture_changed_at timestamp [default: null]
+
+  onboarding_status onboarding_status [default: 'pending']
+
+  preferred_lang uuid [not null, ref: > app_languages.id]
+  preferred_theme app_theme [default: 'system']
+  preferred_tz_offset decimal(3,1) [default: 0]  // UTC+offset
+
+  deleted_at timestamp [default: null]
+  anonymized_at timestamp [default: null]
+
+  email_notifications_enabled bool [not null, default: true]
+  push_notifications_enabled bool [not null, default: false]
+  streak_reminders_enabled bool [not null, default: true]
+}
+
+Table user_devices {
+  ~id
+  ~created_at
+  user_id uuid [not null, ref: > users.id]
+  fcm_token text [not null, unique]
+  last_used_at timestamp [default: `now()`]
+}
+
+Table friendships {
+  ~id
+  ~created_at
+  
+  user_id1 uuid [not null, ref: > users.id]
+  user_id2 uuid [not null, ref: > users.id]
+
+  requested_by_id uuid [not null, ref: > users.id]
+  
+  status request_status [default: 'pending']
+  answered_at timestamp [default: null]
+  
+  deleted_at timestamp [default: null]
+  deleted_by timestamp [default: null, ref: > users.id]
+
+  Indexes {
+    (user_id1, user_id2) [name: 'idx_friendships_user_id1_user_id2_unique', unique]
+  }
+}
+
+Enum request_status {
+  pending
+  accepted
+  denied
+  deleted
+}
+
+Table user_streaks {
+  ~id
+  ~created_at
+
+  user_id uuid [not null, ref: > users.id]
+
+  start_date date [not null, default: `current_date`]
+  end_date date [default: null]
+
+  ends_at timestamp [not null]
+  last_warned_at timestamp [default: null]
+}
+
+Table interests {
+  ~id
+  ~created_at
+  slug text [not null, unique]
+  name text [not null, unique]
+}
+
+Table user_interests {
+  ~id
+  ~created_at
+  user_id uuid [not null, ref: > users.id]
+  interest_id uuid [not null, ref: > interests.id]
+  removed_at timestamp [default: null]
+}
+
+Table speeches {
+  ~id
+  ~created_at
+  user_id uuid [not null, ref: > users.id]
+  caption text [default: null]
+  s3_url text [default: null]
+  is_cancelled bool [not null, default: false]
+  visibility_level speech_visibility [default: 'private']
+  interest_id uuid [default: null]
+  task text [default: null]
+  deleted_by uuid [default: null, ref: > users.id]
+
+  Indexes {
+    (user_id, created_at, is_cancelled) [name: 'idx_speeches_user_id_created_at_is_cancelled']
+  }
+}
+
+Enum speech_visibility {
+  private
+  friends
+}
+
+Enum resolution_action {
+  pending
+  ignored
+  video_deleted
+  user_banned
+}
+
+Table reports {
+  ~id
+  ~created_at
+
+  speech_id uuid [not null, ref: > speeches.id]
+
+  reported_by uuid [not null, ref: > users.id]
+  reason text [default: null]
+
+  resolved_by uuid [default: null, ref: > users.id]
+  resolution_action resolution_action [default: 'pending']
+}
+
+Table ratings {
+  ~id
+  ~created_at
+  speech_id uuid [not null, ref: > speeches.id]
+  rated_by uuid [not null, ref: > users.id]
+  score decimal(5,2) [not null]
+  removed_at timestamp [default: null]
+
+  Indexes {
+    (rated_by, speech_id) [name: 'idx_ratings_rated_by_speech_id_unique', unique]
+  }
+}
+
+Table bans {
+  ~id
+  ~created_at
+  user_id uuid [not null, ref: > users.id]
+  ends_at timestamp [default: null]
+  reason text [default: null]
+  banned_by uuid [not null, ref: > users.id]
+  report_id uuid [default: null, ref: > reports.id]
+}
+
+TablePartial id {
+  id uuid [pk]
+}
+
+TablePartial created_at {
+  created_at timestamp [not null, default: `now()`]
+}
