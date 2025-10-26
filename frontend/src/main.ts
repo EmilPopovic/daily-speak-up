@@ -4,6 +4,7 @@ import './style.css'
 import PrimeVue from 'primevue/config';
 import Lara from '@primeuix/themes/lara';
 import { definePreset } from '@primeuix/themes';
+import router from './router';
 
 const DailySpeakUpPreset = definePreset(Lara, {
     semantic: {
@@ -25,6 +26,8 @@ const DailySpeakUpPreset = definePreset(Lara, {
 });
 
 const app = createApp(App);
+
+// middleware
 app.use(PrimeVue, {
     theme: {
         preset: DailySpeakUpPreset,
@@ -33,5 +36,7 @@ app.use(PrimeVue, {
         }
     }
 });
+
+app.use(router);
 
 app.mount('#app');

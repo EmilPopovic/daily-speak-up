@@ -1,19 +1,12 @@
-<script setup lang="ts">
-  import Button from "primevue/button"
+<script setup>
+  import { RouterView, RouterLink } from 'vue-router';
 </script>
 
 <template>
-  <div class="text-shadow-sm font-extrabold">
-    <h1>DailySpeakUp</h1>
-  </div>
-
-  <Button class="mt-[5rem] btnmy" 
-          label="Click Me!" 
-          onmousedown="alert('Ovaj gumbić još nikaj ne dela... 😞')"/>
+    <ul class="m-[4rem]">
+      <li class="mb-2 hover:scale-105"><RouterLink to="/">Početna</RouterLink></li>
+      <li class="mt-2 hover:scale-105"><RouterLink to="/about">O nama</RouterLink></li>
+      <li class="mt-2 hover:scale-105"><RouterLink to="/login">Login</RouterLink></li>
+    </ul>
+    <RouterView />
 </template>
-
-<style scoped>
-.btnmy {
-  --p-button-border-radius: 9rem;
-}
-</style>
