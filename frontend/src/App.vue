@@ -7,7 +7,9 @@
     <h1>DailySpeakUp</h1>
   </div>
 
-  <Button class="mt-[5rem] btnmy" label="Click Me!"/>
+  <Button class="mt-[5rem] btnmy" 
+          label="Click Me!" 
+          onmousedown="alert('Ovaj gumbić još nikaj ne dela... 😞')"/>
 </template>
 
 <style scoped>
