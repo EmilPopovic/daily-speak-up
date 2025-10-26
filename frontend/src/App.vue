@@ -3,13 +3,15 @@
 </script>
 
 <template>
-  <div>
+  <div class="text-shadow-sm font-extrabold">
     <h1>DailySpeakUp</h1>
   </div>
 
-  <Button label="Click Me!" />
+  <Button class="mt-[5rem] btnmy" label="Click Me!"/>
 </template>
 
 <style scoped>
-
+.btnmy {
+  --p-button-border-radius: 9rem;
+}
 </style>
