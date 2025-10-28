@@ -1,8 +1,13 @@
 import configparser
+import os
 from os import getenv
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
 _settings: 'Settings | None' = None
+
+# Load .env file from the backend directory (next to src/)
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env'))
 
 class Settings(BaseSettings):
     def __init__(self) -> None:
@@ -28,7 +33,7 @@ class Settings(BaseSettings):
     # endregion
     
     class Config:
-        env_file = '.env'
+        env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env')
         extra = 'ignore'
 
 def get_settings() -> Settings:

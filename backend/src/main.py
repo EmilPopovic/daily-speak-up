@@ -1,13 +1,10 @@
 import logging
-from dotenv import load_dotenv
 from fastapi import FastAPI, status, Request
 from fastapi.responses import JSONResponse
 
 from .api.v1 import (
     health_router
 )
-
-load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
