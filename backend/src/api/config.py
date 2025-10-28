@@ -30,6 +30,22 @@ class Settings(BaseSettings):
     def environment(self) -> str:
         return getenv('ENVIRONMENT', 'dev')
     
+    @property
+    def auth0_domain(self) -> str:
+        return getenv('AUTH0_DOMAIN', '')
+    
+    @property
+    def auth0_api_audience(self) -> str:
+        return getenv('AUTH0_AUDIENCE', 'http://localhost:8123/')
+    
+    @property
+    def auth0_algorithms(self) -> str:
+        return getenv('AUTH0_ALGORITHMS', 'RS256')
+    
+    @property
+    def auth0_issuer(self) -> str:
+        return f'https://{self.auth0_domain}/'
+    
     # endregion
     
     class Config:

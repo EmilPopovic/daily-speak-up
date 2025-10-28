@@ -4,3 +4,5 @@ python-dotenv
 pydantic-settings
 sqlalchemy[mypy]
 psycopg2-binary
+python-jose[cryptography]
+httpx
