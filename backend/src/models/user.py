@@ -4,7 +4,6 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     Text,
-    ForeignKey,
     Index,
     Numeric,
     Enum as SQLEnum,
@@ -15,10 +14,9 @@ import datetime
 import uuid
 
 from ..db import Base
-from .enums import UserRole, OnboardingStatus, AppTheme
+from .enums import UserRole, OnboardingStatus, AppTheme, AppLang
 
 if TYPE_CHECKING:
-    from .app_language import AppLanguage
     from .user_device import UserDevice
     from .friendship import Friendship
     from .user_streak import UserStreak
@@ -61,6 +59,7 @@ class User(Base):
 
     role: Mapped[UserRole] = mapped_column(
         SQLEnum(UserRole, name='user_role', create_type=True),
+        default=UserRole.USER,
         nullable=False,
     )
 
@@ -104,9 +103,9 @@ class User(Base):
         nullable=False,
     )
 
-    preferred_lang: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey('app_languages.id'),
+    preferred_lang: Mapped[AppLang] = mapped_column(
+        SQLEnum(AppLang, name='app_lang', create_type=True),
+        default=AppLang.EN,
         nullable=False,
     )
     preferred_theme: Mapped[AppTheme] = mapped_column(
@@ -131,12 +130,12 @@ class User(Base):
 
     email_notifications_enabled: Mapped[bool] = mapped_column(
         Boolean,
-        default=True,
+        default=False,
         nullable=False,
     )
     push_notifications_enabled: Mapped[bool] = mapped_column(
         Boolean,
-        default=False,
+        default=True,
         nullable=False,
     )
     streak_reminders_enabled: Mapped[bool] = mapped_column(
@@ -146,11 +145,6 @@ class User(Base):
     )
 
     # Relationships
-    preferred_language: Mapped[AppLanguage] = relationship(
-        'AppLanguage',
-        back_populates='users',
-    )
-
     devices: Mapped[List[UserDevice]] = relationship(
         'UserDevice',
         back_populates='user',

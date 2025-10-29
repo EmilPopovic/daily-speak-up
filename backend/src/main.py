@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 
 from .api.v1 import (
     health_router,
-    auth_router,
+    user_router,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 app.include_router(health_router, prefix='/api/v1')
-app.include_router(auth_router, prefix='/api/v1')
+app.include_router(user_router, prefix='/api/v1')
 
 @app.get('/', tags=['Root'])
 async def root():

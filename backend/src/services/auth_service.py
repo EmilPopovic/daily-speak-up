@@ -4,20 +4,10 @@ from fastapi.security import (
     HTTPBearer,
 )
 from fastapi import Depends, HTTPException, status
-from typing import Any, Dict, Optional, TypedDict, List, Union
+from typing import Any, Dict, Optional
 from jose import jwt, JWTError
 from ..api.config import get_settings
-
-class JWTPayload(TypedDict, total=False):
-    iss: str
-    sub: str
-    aud: Union[str, List[str]]
-    iat: int
-    exp: int
-    gty: str
-    azp: str
-    scope: str
-    email: str
+from ..schemas import JWTPayload
 
 class UnauthenticatedException(HTTPException):
     def __init__(self, detail: str) -> None:
