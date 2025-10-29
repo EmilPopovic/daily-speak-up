@@ -38,7 +38,6 @@ app.use(PrimeVue, {
     }
 });
 
-// Get environment variables from either Vite or runtime config
 const env = {
     VITE_AUTH0_DOMAIN: import.meta.env.VITE_AUTH0_DOMAIN || (window as any).ENV?.VITE_AUTH0_DOMAIN,
     VITE_AUTH0_CLIENT_ID: import.meta.env.VITE_AUTH0_CLIENT_ID || (window as any).ENV?.VITE_AUTH0_CLIENT_ID,
@@ -51,6 +50,8 @@ app.use(
         authorizationParams: {
             redirect_uri: window.location.origin,
         },
+        cacheLocation: "localstorage",
+        useRefreshTokens: true,
     })
 );
 
