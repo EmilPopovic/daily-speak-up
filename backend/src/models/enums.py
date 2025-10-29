@@ -6,6 +6,11 @@ class AppTheme(str, Enum):
     LIGHT = 'light'
     DARK = 'dark'
 
+class AppLang(str, Enum):
+    """Application language options."""
+    EN = 'en'
+    HR = 'hr'
+
 class UserRole(str, Enum):
     """User role options"""
     USER = 'user'

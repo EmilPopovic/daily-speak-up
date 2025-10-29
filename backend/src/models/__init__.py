@@ -6,7 +6,6 @@ from .enums import (
     SpeechVisibility,
     ResolutionAction,
 )
-from .app_language import AppLanguage
 from .ban import Ban
 from .friendship import Friendship
 from .interest import Interest
