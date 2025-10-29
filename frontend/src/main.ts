@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config';
 import Lara from '@primeuix/themes/lara';
 import { definePreset } from '@primeuix/themes';
 import router from './router';
+import { createAuth0 } from '@auth0/auth0-vue';
 
 const DailySpeakUpPreset = definePreset(Lara, {
     semantic: {
@@ -36,6 +37,18 @@ app.use(PrimeVue, {
         }
     }
 });
+
+console.log(import.meta.env)
+
+app.use(
+    createAuth0({
+        domain: import.meta.env.VITE_AUTH0_DOMAIN,
+        clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+        authorizationParams: {
+            redirect_uri: window.location.origin,
+        },
+    })
+);
 
 app.use(router);
 

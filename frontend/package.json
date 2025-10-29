@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^2.4.0",
     "@primeuix/themes": "^1.2.5",
     "@tailwindcss/vite": "^4.1.16",
     "primevue": "^4.4.1",

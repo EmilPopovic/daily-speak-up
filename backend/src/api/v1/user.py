@@ -10,7 +10,7 @@ from ...models import User
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=['user'], prefix='/user')
 
-@router.put('/register', response_model=JSONResponse)
+@router.put('/register', response_class=JSONResponse)
 def register(
     db: Session = Depends(get_db),
     auth_result: JWTPayload = Security(get_auth_service().verify)
@@ -36,4 +36,9 @@ def register(
     db.flush()
     db.commit()
 
-    return status.HTTP_200_OK
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            'message': 'ok'
+        }
+    )
