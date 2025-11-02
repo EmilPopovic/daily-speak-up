@@ -14,6 +14,7 @@ app = FastAPI()
 
 app.include_router(health_router, prefix='/api/v1')
 app.include_router(user_router, prefix='/api/v1')
+app.include_router(topic_router, prefix='/api/v1')
 
 @app.get('/', tags=['Root'])
 async def root():
@@ -25,7 +26,8 @@ async def root():
             'version': '1.0.0',
             'docs': '/docs',
             'base': '/api/v1',
-            'health': '/api/v1/health'
+            'health': '/api/v1/health',
+            'topics': '/api/v1/topics'
         }
     )
 
