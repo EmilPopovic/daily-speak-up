@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from .api.v1 import (
     health_router,
     user_router,
+    topic_router
 )
 
 logging.basicConfig(level=logging.INFO)

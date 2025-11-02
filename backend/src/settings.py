@@ -3,7 +3,8 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     gemini_api_key: str
-    
+    database_url: str
+   
     class Config:
         env_file = ".env"
         case_sensitive = False
