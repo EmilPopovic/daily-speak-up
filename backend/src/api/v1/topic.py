@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
-from src.services.gemini_service import GeminiService
-from src.settings import get_settings, Settings
-from src.models.enums import AppLang
+from ...services.gemini_service import GeminiService
+from ...settings import get_settings, Settings
+from ...models.enums import AppLang
+
 
 router = APIRouter(prefix='/topics', tags=['Topics'])
 

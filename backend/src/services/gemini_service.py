@@ -1,7 +1,6 @@
 from google import genai
-from src.settings import Settings
-from src.models.enums import AppLang
-
+from ..settings import Settings
+from ..models.enums import AppLang
 class GeminiService:
     def __init__(self, settings: Settings):
         self.client = genai.Client(api_key=settings.gemini_api_key)
