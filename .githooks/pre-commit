@@ -1,16 +1,45 @@
 #!/bin/bash
 
+ALLOWED_NAMES=(
+    "Emil Popović"
+    "Matej Jurasić"
+    "Mate Jakovljev"
+    "Lara Desnica"
+    "Nika Valić"
+    "Kristijan Bilanović"
+    "Lara Brečić"
+)
+
 EMAIL=$(git config user.email)
+NAME=$(git config user.name)
 DOMAIN="${EMAIL##*@}"
 
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 RESET='\033[0m'
 
+# Check email domain
 if [[ "$DOMAIN" != "fer.unizg.hr" ]]; then
     echo -e "${RED}[ERROR] Invalid email: $EMAIL${RESET}"
     echo -e "${YELLOW}Repository requires email domain: @fer.unizg.hr${RESET}"
     echo -e "${YELLOW}Run: git config user.email \"yourname@fer.unizg.hr\"${RESET}"
+    exit 1
+fi
+
+# Check username
+NAME_FOUND=0
+for allowed_name in "${ALLOWED_NAMES[@]}"; do
+    if [[ "$NAME" == "$allowed_name" ]]; then
+        NAME_FOUND=1
+        break
+    fi
+done
+
+if [[ $NAME_FOUND -eq 0 ]]; then
+    echo -e "${RED}[ERROR] Invalid git username: $NAME${RESET}"
+    echo -e "${YELLOW}Username must be one of the following:${RESET}"
+    printf "${YELLOW}%s${RESET}\n" "${ALLOWED_NAMES[@]}"
+    echo -e "${YELLOW}Run: git config user.name \"Your Name\"${RESET}"
     exit 1
 fi
 
