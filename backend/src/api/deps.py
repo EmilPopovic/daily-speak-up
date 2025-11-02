@@ -29,7 +29,11 @@ def get_gemini_service() -> GeminiService:
     """Returns a preconfigured GeminiService object"""
     global _gemini_service
     if _gemini_service is None:
-        _gemini_service = GeminiService()
+        settings = get_settings()
+        _gemini_service = GeminiService(
+            api_key=settings.gemini_api_key,
+            model_id=settings.gemini_model_id
+        )
     return _gemini_service
 
 def get_s3_service() -> S3Service:
