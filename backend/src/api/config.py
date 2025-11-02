@@ -3,6 +3,7 @@ import os
 from os import getenv
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
+from functools import lru_cache
 
 _settings: 'Settings | None' = None
 
@@ -45,6 +46,19 @@ class Settings(BaseSettings):
     @property
     def auth0_issuer(self) -> str:
         return f'https://{self.auth0_domain}/'
+    
+    @property
+    def gemini_api_key(self) -> str:
+        """Get Gemini API key from environment."""
+        key = getenv('GEMINI_API_KEY', '')
+        if not key:
+            raise ValueError('GEMINI_API_KEY is not set in environment variables')
+        return key
+    
+    @property
+    def gemini_model_id(self) -> str:
+        """Get Gemini model ID from environment."""
+        return getenv('GEMINI_MODEL_ID', 'gemini-2.0-flash-exp')
     
     # endregion
     
