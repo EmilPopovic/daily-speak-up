@@ -8,6 +8,12 @@ from ..models.enums import (
     UserRole
 )
 
+class UserCreate(BaseModel):
+    auth0_id: str
+    email: str
+    name: str | None = None
+    email_verified: bool = False
+
 class UserResponse(BaseModel):
     role: UserRole
     email: str

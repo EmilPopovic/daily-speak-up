@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from ..deps import get_auth_service
 from ...db import get_db
-from ...schemas import JWTPayload, UserResponse
+from ...schemas import JWTPayload, UserResponse, UserCreate
 from ...models import User
 
 logger = logging.getLogger(__name__)
@@ -13,13 +13,12 @@ router = APIRouter(tags=['user'], prefix='/user')
 
 @router.put('/register', response_class=JSONResponse)
 def register(
+    user_data: UserCreate,
     db: Session = Depends(get_db),
-    auth_result: JWTPayload = Security(get_auth_service().verify)
+    _: JWTPayload = Security(get_auth_service().verify)
 ):
-    auth0_user_id = auth_result['sub']
-
     existing_user: User | None = db.query(User).filter(
-        User.auth0_user_id == auth0_user_id
+        User.auth0_user_id == user_data.auth0_id
     ).first()
 
     if existing_user:
@@ -29,13 +28,13 @@ def register(
         )
 
     user = User(
-        auth0_user_id=auth0_user_id,
-        email=auth_result['email'],
-        handle=auth0_user_id,
+        auth0_user_id=user_data.auth0_id,
+        email=user_data.email,
+        handle=user_data.auth0_id,
     )
     db.add(user)
-    db.flush()
     db.commit()
+    db.refresh(user)
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
