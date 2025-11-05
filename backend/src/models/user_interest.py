@@ -45,6 +45,11 @@ class UserInterest(Base):
         ForeignKey('users.id'),
         nullable=False,
     )
+    interest_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey('interests.id'),
+        nullable=False,
+    )
     removed_at: Mapped[Optional[datetime.datetime]] = mapped_column(
         DateTime(timezone=True),
         nullable=True,

@@ -80,7 +80,7 @@ class Report(Base):
         'Speech',
         back_populates='reports',
     )
-    repoter: Mapped[User] = relationship(
+    reporter: Mapped[User] = relationship(
         'User',
         foreign_keys=[reported_by],
         back_populates='reports',
