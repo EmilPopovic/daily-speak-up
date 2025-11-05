@@ -7,7 +7,7 @@ app = Celery(
     'email_tasks', 
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
-    include=['.celery_tasks']
+    include=['src.services.email_impl.celery_tasks']
 )
 
 app.conf.update(
