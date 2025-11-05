@@ -6,7 +6,7 @@ class EmailService:
     """
     
     @staticmethod
-    def send_email(to_mail: str, subject: str) -> None:
+    def send_email(to_mail: str, subject: str, message: str = 'Welcome to DailySpeakUp!') -> None:
         """
             Send an email using Resend API.
 
@@ -17,4 +17,4 @@ class EmailService:
             :param subject: Subject of the email.
         """
         # enqueue email sending task to Celery worker
-        send_email_task.delay(to_mail, subject)
+        send_email_task.delay(to_mail, subject, body_text=message)

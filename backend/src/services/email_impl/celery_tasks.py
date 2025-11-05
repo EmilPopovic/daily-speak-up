@@ -2,12 +2,12 @@ from .celery_app import app
 from .sender import ResendEmailSender
 
 @app.task(rate_limit='2/s')
-def send_email_task(to_mail: str, subject: str) -> None:
+def send_email_task(to_mail: str, subject: str, body_text: str) -> None:
     
     sender = ResendEmailSender()
 
     sender.send_email(
         to_email=to_mail,
         subject=subject,
-        body=""
+        body_text=body_text
     )

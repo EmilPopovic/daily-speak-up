@@ -1,4 +1,5 @@
 from ...api.config import get_settings
+from .email_template import basic_html_message, place_holder
 import resend
 
 class ResendEmailSender:
@@ -7,14 +8,17 @@ class ResendEmailSender:
         self.api_key = self._settings.RESEND_API_KEY
         self.from_email = self._settings.RESEND_FROM_EMAIL
 
-    def send_email(self, to_email: str, subject: str, body: str) -> None:
+    def send_email(self, to_email: str, subject: str, body_text: str) -> None:
         resend.api_key = self.api_key
+
+        html = basic_html_message().replace(place_holder(), body_text)
+
 
         params: resend.Emails.SendParams = {
             "from" : self.from_email,
             "to" : [to_email],
             "subject" : subject,
-            "html" : "<strong> test </strong>"
+            "html" : html
         }
 
         email = resend.Emails.send(params)
