@@ -1,5 +1,5 @@
 from google import genai
-from ..models.enums import AppLang
+from ..models import AppLang
 
 
 class GeminiService:

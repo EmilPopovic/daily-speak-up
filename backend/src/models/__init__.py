@@ -1,5 +1,6 @@
 from .enums import (
     AppTheme,
+    AppLang,
     UserRole,
     OnboardingStatus,
     RequestStatus,
@@ -20,6 +21,7 @@ from .user import User
 __all__ = [
     # Enums
     'AppTheme',
+    'AppLang',
     'UserRole',
     'OnboardingStatus',
     'RequestStatus',

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from ..models.enums import AppLang
+from ..models import AppLang
 
 
 class TopicRequest(BaseModel):

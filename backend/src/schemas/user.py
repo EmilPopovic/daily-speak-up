@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from ..models.enums import (
+from ..models import (
     AppLang,
     AppTheme,
     OnboardingStatus,
