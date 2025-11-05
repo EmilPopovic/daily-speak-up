@@ -60,6 +60,14 @@ class Settings(BaseSettings):
         """Get Gemini model ID from environment."""
         return getenv('GEMINI_MODEL_ID', 'gemini-2.0-flash-exp')
     
+    @property
+    def CELERY_BROKER_URL(self) -> str:
+        return getenv('RABBIT_MQ_URL', 'amqp://guest:guest@localhost:5672/')
+
+    @property
+    def CELERY_RESULT_BACKEND(self) -> str:
+        return getenv('CELERY_RESULT_BACKEND', 'rpc://')
+
     # endregion
     
     class Config:
