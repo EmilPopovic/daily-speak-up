@@ -1,3 +1,5 @@
+from email_impl import send_email_task
+
 class EmailService:
     """
         Class that provides a high-level abstraction for sending emails using Resend API.
@@ -15,4 +17,4 @@ class EmailService:
             :param subject: Subject of the email.
         """
         # enqueue email sending task to Celery worker
-        pass
+        send_email_task.delay(to_mail, subject)
