@@ -44,7 +44,7 @@ def register(
         }
     )
 
-@router.put('/me', response_model=UserResponse, status_code=status.HTTP_200_OK)
+@router.get('/me', response_model=UserResponse, status_code=status.HTTP_200_OK)
 def me(
     db: Session = Depends(get_db),
     auth_result: JWTPayload = Security(get_auth_service().verify),
