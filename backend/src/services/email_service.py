@@ -1,4 +1,4 @@
-from email_impl import send_email_task
+from .email_impl.celery_tasks import send_email_task
 
 class EmailService:
     """
