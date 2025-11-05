@@ -15,6 +15,7 @@ class EmailService:
             
             :param to_mail: Recipient's email address.
             :param subject: Subject of the email.
+            :param message: Message you want to send.
         """
         # enqueue email sending task to Celery worker
         send_email_task.delay(to_mail, subject, body_text=message)
