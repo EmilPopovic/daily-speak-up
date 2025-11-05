@@ -1,2 +1,18 @@
 class EmailService:
-    ...
+    """
+        Class that provides a high-level abstraction for sending emails using Resend API.
+    """
+    
+    @staticmethod
+    def send_email(to_mail: str, subject: str) -> None:
+        """
+            Send an email using Resend API.
+
+            This method takes the recipient's email address and the subject of the email as parameters.
+            It retursns nothing.
+            
+            :param to_mail: Recipient's email address.
+            :param subject: Subject of the email.
+        """
+        # enqueue email sending task to Celery worker
+        pass
