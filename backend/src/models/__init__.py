@@ -14,6 +14,7 @@ from .report import Report
 from .speech import Speech
 from .user_device import UserDevice
 from .user_streak import UserStreak
+from .user_interest import UserInterest
 from .user import User
 
 __all__ = [
@@ -26,7 +27,6 @@ __all__ = [
     'ResolutionAction',
 
     # Tables
-    'AppLanguage',
     'Ban',
     'Friendship',
     'Interest',
@@ -35,5 +35,6 @@ __all__ = [
     'Speech',
     'UserDevice',
     'UserStreak',
+    'UserInterest',
     'User',
 ]
