@@ -8,3 +8,31 @@ __pycache__/
 !.env.dokploy.template
 !.env.template
 !.env.example
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Editor folders
+.vscode/
+.idea/
+
+# Env files (lokalne varijable)
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# Allow only template/example envs
+!.env.example
+!.env.template
+!.env.dokploy.template
+

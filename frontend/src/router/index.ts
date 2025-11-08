@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import Landing from '../views/Landing.vue'
 import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
+import OnboardingView from '../views/OnboardingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,14 +14,20 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about',
-      name: 'about',
-      component: AboutView
+      path: '/landing',
+      name: 'landing',
+      component: Landing
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView
+    }
+    ,
+    {
+      path: '/onboarding',
+      name: 'onboarding',
+      component: OnboardingView
     }
   ]
 });
