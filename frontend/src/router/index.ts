@@ -10,13 +10,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/landing',
       name: 'landing',
       component: Landing
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: HomeView
     },
     {
       path: '/:pathMatch(.*)*',

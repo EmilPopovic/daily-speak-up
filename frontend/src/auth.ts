@@ -1,19 +1,21 @@
-import { createAuth0Client, Auth0Client } from '@auth0/auth0-spa-js';
+import type { Auth0Client } from '@auth0/auth0-spa-js';
 
 let clientPromise: Promise<Auth0Client> | null = null;
 
-function getClient(): Promise<Auth0Client> {
+function getClient() {
   if (!clientPromise) {
-    clientPromise = createAuth0Client({
-      domain: import.meta.env.VITE_AUTH0_DOMAIN,
-      clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-        redirect_uri: import.meta.env.VITE_AUTH0_REDIRECT_URI
-      },
-      cacheLocation: 'localstorage',
-      useRefreshTokens: true
-    });
+    clientPromise = import('@auth0/auth0-spa-js').then(m =>
+      m.createAuth0Client({
+        domain: import.meta.env.VITE_AUTH0_DOMAIN,
+        clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+          redirect_uri: import.meta.env.VITE_AUTH0_REDIRECT_URI
+        },
+        cacheLocation: 'localstorage',
+        useRefreshTokens: true
+      })
+    ) as Promise<Auth0Client>;
   }
   return clientPromise;
 }
@@ -39,6 +41,7 @@ export async function logout() {
 
 export async function isAuthenticated(): Promise<boolean> {
   const client = await getClient();
+  if (!client) throw new Error('Auth0 client not initialized');
   return client.isAuthenticated();
 }
 
