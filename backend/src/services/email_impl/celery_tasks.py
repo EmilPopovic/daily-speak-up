@@ -1,7 +1,10 @@
 from .celery_app import app
 from .sender import ResendEmailSender
+from ...api.config import get_settings
 
-@app.task(rate_limit='2/s')
+settings = get_settings()
+
+@app.task(rate_limit=settings.CELERY_RATE_LIMIT)
 def send_email_task(to_mail: str, subject: str, body_text: str) -> None:
     """
         This is a celery worker function that reads basic information about an email, assembles it 

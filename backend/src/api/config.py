@@ -80,6 +80,10 @@ class Settings(BaseSettings):
     def RESEND_FROM_EMAIL(self) -> str:
         return getenv('RESEND_FROM_EMAIL', 'noreply@dailyspeak.app')
     
+    @property
+    def CELERY_RATE_LIMIT(self) -> str:
+        return getenv('CELERY_RATE_LIMIT', '2/s')
+    
     # endregion
     
     class Config:
