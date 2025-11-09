@@ -12,7 +12,8 @@ npm:
 
 dev:
 	make backend &
-	make frontend
+	make email-worker &
+	make frontend 
 
 backend:
 	.venv/bin/python -m uvicorn backend.src.main:app --host 0.0.0.0 --port 8123
@@ -38,5 +39,15 @@ reset-db-force:
 drop-db:
 	@echo "Dropping all database tables..."
 	.venv/bin/python -m backend.src.db_manager drop
+
+docker-rabbitmq:
+	docker compose -f 'compose.yaml' up -d --build 'rabbitmq'
+
+docker-celery-worker:
+	docker compose -f 'compose.yaml' up -d --build 'celery_worker'
+
+email-worker:
+	make docker-rabbitmq &
+	make docker-celery-worker
 
 .PHONY: setup install pip dev backend frontend test create-db reset-db reset-db-force drop-db

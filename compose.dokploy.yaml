@@ -1,4 +1,7 @@
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
   backend:
     build:
       context: backend
@@ -7,6 +10,7 @@ services:
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-dev}
       - DATABASE_URL=${DATABASE_URL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
       - AUTH0_DOMAIN=${AUTH0_DOMAIN}
       - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
       - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
@@ -44,3 +48,20 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+  celery_worker:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    command: celery -A src.services.email_impl.celery_app:app worker -l INFO
+    depends_on:
+      - backend
+      - rabbitmq
+    environment:
+      - RABBIT_MQ_URL=amqp://guest:guest@rabbitmq:5672//
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+      - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}

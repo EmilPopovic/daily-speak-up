@@ -62,7 +62,7 @@ class Settings(BaseSettings):
     
     @property
     def CELERY_BROKER_URL(self) -> str:
-        return getenv('RABBIT_MQ_URL', 'amqp://guest:guest@localhost:5672/')
+        return getenv('RABBIT_MQ_URL', 'amqp://guest:guest@rabbitmq:5672/')
 
     @property
     def CELERY_RESULT_BACKEND(self) -> str:
