@@ -1,5 +1,7 @@
 from .email_impl.celery_tasks import send_email_task
+from celery import Task
 
+send_email_task: Task
 class EmailService:
     """
         Class that provides a high-level abstraction for sending emails using Resend API.
