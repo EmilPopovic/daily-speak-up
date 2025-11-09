@@ -6,10 +6,10 @@ class ResendEmailSender:
     """
         This class is an implementation of a e-mail sender based on Resend API. 
     """
-    def __init__(self):
+    def __init__(self, resend_api_key : str = None, from_email: str = None) -> None:
         self._settings = get_settings()
-        self.api_key = self._settings.RESEND_API_KEY
-        self.from_email = self._settings.RESEND_FROM_EMAIL
+        self.api_key = resend_api_key 
+        self.from_email = from_email
 
     def send_email(self, to_email: str, subject: str, body_text: str) -> None:
         """
