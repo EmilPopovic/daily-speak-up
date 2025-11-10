@@ -6,6 +6,7 @@ import Lara from '@primeuix/themes/lara';
 import { definePreset } from '@primeuix/themes';
 import router from './router';
 import { createAuth0 } from '@auth0/auth0-vue';
+import 'primeicons/primeicons.css'
 
 const DailySpeakUpPreset = definePreset(Lara, {
     semantic: {
