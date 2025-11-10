@@ -1,15 +1,13 @@
 <script setup lang="ts">
-  import Button from "primevue/button"
+import MainFrame from '../components/MainFrame.vue';
+import FriendsFrame from '../components/FriendsFrame.vue';
 </script>
 
 <template>
-  <div class="text-shadow-sm font-extrabold">
-    <h1>DailySpeakUp</h1>
+  <div class="flex flex-row w-full h-full">
+    <MainFrame />
+    <FriendsFrame />
   </div>
-
-  <Button class="mt-[5rem] btnmy" 
-          label="Click Me!" 
-          onmousedown="alert('Ovaj gumbić još nikaj ne dela... 😞')"/>
 </template>
 
 <style scoped>
