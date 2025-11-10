@@ -3,10 +3,12 @@
     import Logout from './Logout.vue';
     import User from './User.vue';
     import NavBar from './NavBar.vue';
+    import RecordButton from './RecordButton.vue';
+    import Fieldset from 'primevue/fieldset';
 </script>
 
 <template>
-  <div class="flex flex-col w-full h-full bg-gray-300">
+  <div class="flex flex-col items-center w-full h-full">
     <NavBar />
     
     <User />
@@ -19,13 +21,22 @@
       <Logout class="mr-8" />
     </div>
 
-    <div class="bg-sky-400 w-[18rem] h-[18rem] rounded-[50%] flex justify-center items-center mx-auto my-20">
-        <span class="pi pi-microphone"
-              style="color:white; font-size: 14rem;"></span>
+    <div class="border-black justify-center
+                font-sans text-2xl font-semibold text-center my-20">
+      <h1>Start practicing!</h1>
     </div>
+
+    <RecordButton />
+
+    <Fieldset legend="Tema za govor" :toggleable="true">
+      <p class="m-0">
+          Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
+      </p>
+    </Fieldset>
     
   </div>
 </template>
 
 <style scoped>
+
 </style>
