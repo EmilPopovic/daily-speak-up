@@ -1,4 +1,5 @@
 <script setup>
+    import AccountDrawer from './AccountDrawer.vue';
 </script>
 
 <template>
@@ -11,10 +12,7 @@
             <div class="text-sky-500 font-semibold text-3xl">DailySpeakUp</div>
         </div>
 
-        <div class="flex flex-col justify-center items-center border-2 border-solid aspect-square
-                    rounded-full border-blue w-10 h-10 mr-10 hover:scale-105 cursor-pointer transition duration-200">
-            <span class="pi pi-user" style="color:blue; font-size: 1.2rem;"></span>
-        </div>
+        <AccountDrawer />
 
     </div>
     

@@ -10,16 +10,6 @@
 <template>
   <div class="flex flex-col items-center w-full h-full">
     <NavBar />
-    
-    <User />
-    <div class="flex justify-between items-center p-4">
-      <ul class="m-16">
-        <li class="mb-2 hover:scale-105"><RouterLink to="/">Početna</RouterLink></li>
-        <li class="mt-2 hover:scale-105"><RouterLink to="/about">O nama</RouterLink></li>
-      </ul>
-      <Login class="mr-8" />
-      <Logout class="mr-8" />
-    </div>
 
     <div class="border-black justify-center
                 font-sans text-2xl font-semibold text-center my-20">
