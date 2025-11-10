@@ -1,5 +1,5 @@
 from ...api.config import get_settings
-from .email_template import basic_html_message, place_holder
+from .email_template import basic_html_message, place_holder, welcome_message
 import resend
 
 class ResendEmailSender:
@@ -11,7 +11,7 @@ class ResendEmailSender:
         self.api_key = resend_api_key if resend_api_key else self._settings.RESEND_API_KEY
         self.from_email = from_email if from_email else self._settings.RESEND_FROM_EMAIL
 
-    def send_email(self, to_email: str, subject: str, body_text: str) -> None:
+    def send_email(self, to_email: str, subject: str, body_text: str, template: str = None) -> None:
         """
             Method for sending an e-mail using Resend API and basic DailySpeakUp mailig template.
             
@@ -21,7 +21,10 @@ class ResendEmailSender:
         """
         resend.api_key = self.api_key
 
-        html = basic_html_message().replace(place_holder(), body_text)
+        if template is None or template == 'welcome':
+            html = welcome_message()
+        elif template == 'basic_message':
+            html = basic_html_message().replace(place_holder(), body_text)
 
 
         params: resend.Emails.SendParams = {
