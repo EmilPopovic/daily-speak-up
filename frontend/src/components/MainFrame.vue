@@ -1,14 +1,11 @@
 <script setup lang="ts">
-    import Login from './Login.vue';
-    import Logout from './Logout.vue';
-    import User from './User.vue';
     import NavBar from './NavBar.vue';
     import RecordButton from './RecordButton.vue';
     import Fieldset from 'primevue/fieldset';
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full h-full">
+  <div class="flex flex-col items-center w-[60%] h-full">
     <NavBar />
 
     <div class="border-black justify-center
