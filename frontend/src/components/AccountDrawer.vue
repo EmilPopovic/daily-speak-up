@@ -14,7 +14,7 @@
 <template>
     <div class="flex justify-center">
         <Drawer v-model:visible="visible" header="Account Information" position="right" 
-                :dismissable="false" class="!w-full md:!w-50 lg:!w-[35vw]">
+                :dismissable="false" class="!w-full lg:!w-[35vw]">
             <User />
             
             <div class="flex flex-col justify-start items-stretch">

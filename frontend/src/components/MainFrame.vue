@@ -5,24 +5,30 @@
 </script>
 
 <template>
-  <div class="bg-sky-100 flex flex-col items-center w-[65%] h-full">
+  <div class="flex flex-col justify-start items-center bg-sky-100 w-[100vw] h-[60vh] lg:w-[65%] lg:h-full">
+    
     <NavBar />
 
-    <div class="border-black justify-center
-                font-sans text-2xl font-semibold text-center my-[8vh]">
-      <h1>Start practicing!</h1>
-    </div>
+    <div class="w-full h-[53vh] lg:h-full flex flex-col justify-around items-center ">
 
-    <RecordButton />
+      <div class="border-black justify-center
+                  font-sans text-[1.5vw] font-semibold text-center">
+        <h1>Start practicing!</h1>
+      </div>
 
-    <div class="my-[5vh]">
-      <Fieldset legend="Tema za govor" :toggleable="true">
-        <p class="m-0">
-            Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
-        </p>
-      </Fieldset>
+      <div class="my-[5vh]">
+        <RecordButton />
+      </div>
+
+      <div>
+        <Fieldset legend="Tema za govor" :toggleable="true">
+          <p class="m-0">
+              Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
+          </p>
+        </Fieldset>
+      </div>
+
     </div>
-    
   </div>
 </template>
 
