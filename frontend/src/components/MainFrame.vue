@@ -15,7 +15,7 @@
 
     <RecordButton />
 
-    <Fieldset legend="Tema za govor" :toggleable="true">
+    <Fieldset legend="Tema za govor" :toggleable="true" style="margin-top: 43px;">
       <p class="m-0">
           Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
       </p>
