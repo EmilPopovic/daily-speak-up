@@ -5,11 +5,11 @@
 </script>
 
 <template>
-  <div class="bg-sky-100 flex flex-col items-center w-[60%] h-full">
+  <div class="bg-sky-100 flex flex-col items-center w-[65%] h-full">
     <NavBar />
 
     <div class="border-black justify-center
-                font-sans text-2xl font-semibold text-center my-20">
+                font-sans text-2xl font-semibold text-center my-[5%]">
       <h1>Start practicing!</h1>
     </div>
 

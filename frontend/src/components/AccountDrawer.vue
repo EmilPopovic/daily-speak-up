@@ -12,7 +12,7 @@
 </script>
 
 <template>
-    <div class="card flex justify-center">
+    <div class="flex justify-center">
         <Drawer v-model:visible="visible" header="Account Information" position="right" 
                 :dismissable="false" class="!w-full md:!w-50 lg:!w-[40vw]">
             <User />
@@ -27,7 +27,7 @@
             </div>
         </Drawer>
         <div class="flex flex-col justify-center items-center border-2 border-solid aspect-square
-                    rounded-full border-blue w-10 h-10 mr-1 hover:scale-105 cursor-pointer transition duration-200"
+                    rounded-full border-blue w-10 h-10 hover:scale-105 cursor-pointer transition duration-200"
             @click="visible = true">
             <span class="pi pi-user" style="color:blue; font-size: 1.2rem;"></span>
         </div>
@@ -39,8 +39,4 @@
         margin: 1.3rem 0;
     }
 
-    .AccountDrawerRoot {
-        padding: 2rem;
-        width: 20rem;
-    }
 </style>
