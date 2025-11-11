@@ -9,17 +9,19 @@
     <NavBar />
 
     <div class="border-black justify-center
-                font-sans text-2xl font-semibold text-center my-[5%]">
+                font-sans text-2xl font-semibold text-center my-[8vh]">
       <h1>Start practicing!</h1>
     </div>
 
     <RecordButton />
 
-    <Fieldset legend="Tema za govor" :toggleable="true" style="margin-top: 43px;">
-      <p class="m-0">
-          Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
-      </p>
-    </Fieldset>
+    <div class="my-[5vh]">
+      <Fieldset legend="Tema za govor" :toggleable="true">
+        <p class="m-0">
+            Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
+        </p>
+      </Fieldset>
+    </div>
     
   </div>
 </template>
