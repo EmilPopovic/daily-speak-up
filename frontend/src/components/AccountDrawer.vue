@@ -27,9 +27,9 @@
             </div>
         </Drawer>
         <div class="flex flex-col justify-center items-center border-2 border-solid aspect-square
-                    rounded-full border-blue w-10 h-10 hover:scale-105 cursor-pointer transition duration-200"
+                    rounded-full border-blue w-10 mr-1 h-10 hover:scale-105 cursor-pointer transition duration-200"
             @click="visible = true">
-            <span class="pi pi-user" style="color:blue; font-size: 1.2rem;"></span>
+            <span class="pi pi-user" style="color:black; font-size: 1.2rem;"></span>
         </div>
     </div>
 </template>
