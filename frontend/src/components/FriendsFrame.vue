@@ -10,9 +10,8 @@
     </div>
     <ScrollPanel style="width: 99%; height: 93%">
       
-      <div class="grid grid-cols-3 gap-3 mt-8" >
+      <div class="grid grid-cols-3 gap-3 mt-8  mr-5 ml-5">
         <div v-for="i in 30" :key="i" class="m-1">
-
           <Avatar image="https://avatars.githubusercontent.com/u/236687211?v=4" class="" size="xlarge" shape="circle" :pt="{root:{class:'velicina_slike'}}" />
           <div>
             Lara D
