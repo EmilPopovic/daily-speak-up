@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-[60%] h-full">
+  <div class="bg-sky-100 flex flex-col items-center w-[60%] h-full">
     <NavBar />
 
     <div class="border-black justify-center
