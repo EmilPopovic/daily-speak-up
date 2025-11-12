@@ -8,6 +8,24 @@ services:
     networks:
       - internal
 
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
+    container_name: supertokens
+    ports:
+      - "3567:3567"
+    environment:
+      POSTGRESQL_CONNECTION_URI: "${SUPERTOKENS_DATABASE_URL}"
+      API_KEYS: "${SUPERTOKENS_API_KEY}"
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal
+
   backend:
     build:
       context: backend
@@ -26,6 +44,14 @@ services:
       - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT}
+      - SUPERTOKENS_CONNECTION_URI=http://supertokens:3567
+      - SUPERTOKENS_API_KEY=${SUPERTOKENS_API_KEY}
+      - API_DOMAIN=${API_DOMAIN:-http://localhost:8123}
+      - WEBSITE_DOMAIN=${WEBSITE_DOMAIN:-http://localhost:3000}
+      - APP_NAME=${APP_NAME:-DailySpeakUp}
+    depends_on:
+      supertokens:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8123/api/v1/health"]
       interval: 30s
@@ -47,6 +73,8 @@ services:
       args:
         - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
         - VITE_AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+        - VITE_API_DOMAIN=${VITE_API_DOMAIN:-http://localhost:8123}
+        - VITE_WEBSITE_DOMAIN=${VITE_WEBSITE_DOMAIN:-http://localhost:3000}
     restart: unless-stopped
     ports:
       - 3000:3000
@@ -75,6 +103,7 @@ services:
     depends_on:
       - backend
       - rabbitmq
+      - supertokens
     environment:
       - RABBIT_MQ_URL=amqp://guest:guest@rabbitmq:5672//
       - ENVIRONMENT=${ENVIRONMENT:-dev}
@@ -86,6 +115,11 @@ services:
       - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT}
+      - SUPERTOKENS_CONNECTION_URI=http://supertokens:3567
+      - SUPERTOKENS_API_KEY=${SUPERTOKENS_API_KEY}
+      - API_DOMAIN=${API_DOMAIN:-http://localhost:8123}
+      - WEBSITE_DOMAIN=${WEBSITE_DOMAIN:-http://localhost:3000}
+      - APP_NAME=${APP_NAME:-DailySpeakUp}
     networks:
       - internal
 

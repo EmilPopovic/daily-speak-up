@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 from ..models import (
     AppLang,
@@ -9,10 +9,8 @@ from ..models import (
 )
 
 class UserCreate(BaseModel):
-    auth0_id: str
-    email: str
+    email: EmailStr
     name: str | None = None
-    email_verified: bool = False
 
 class UserResponse(BaseModel):
     role: UserRole
