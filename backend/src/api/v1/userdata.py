@@ -159,6 +159,7 @@ async def set_interests(
          if interest not in unadded_interests
       ]
       return JSONResponse(
+         status_code=status.HTTP_207_MULTI_STATUS,
          content={
             "message": "Some interests were not found and/or could not be added", 
             'added_interests': added_interests_str,
