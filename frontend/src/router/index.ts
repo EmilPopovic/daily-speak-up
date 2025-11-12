@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Landing from '../views/Landing.vue'
 import HomeView from '../views/HomeView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
+import AuthCallbackView from '../views/AuthCallbackView.vue'
+import PasswordlessCallbackView from '../views/PasswordlessCallbackView.vue'
 import OnboardingView from '../views/OnboardingView.vue'
 
 const router = createRouter({
@@ -17,6 +19,16 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/auth/callback/google',
+      name: 'auth-callback',
+      component: AuthCallbackView
+    },
+    {
+      path: '/auth/verify',
+      name: 'passwordless-callback',
+      component: PasswordlessCallbackView
     },
     {
       path: '/:pathMatch(.*)*',

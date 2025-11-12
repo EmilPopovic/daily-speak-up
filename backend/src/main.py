@@ -2,6 +2,11 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, status, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+
+# SuperTokens imports
+from supertokens_python import get_all_cors_headers
+from supertokens_python.framework.fastapi import get_middleware
 
 from .api.v1 import (
     health_router,
@@ -9,14 +14,23 @@ from .api.v1 import (
     topic_router,
     userdata_router
 )
+from .services.supertokens_service import init_supertokens
+from .api.config import get_settings
 from .db_manager import seed_default_interests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Get settings
+settings = get_settings()
+
+# Initialize SuperTokens BEFORE creating the app
+init_supertokens()
+logger.info("SuperTokens initialized")
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initialize database with default data on startup"""
+    """Lifespan events"""
     try:
         logger.info("Running startup tasks...")
         seed_default_interests()
@@ -29,6 +43,29 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Add SuperTokens middleware FIRST
+app.add_middleware(get_middleware())
+
+# Add CORS middleware AFTER SuperTokens middleware
+# Allow both configured domain and localhost for development
+allowed_origins = [settings.website_domain]
+if settings.environment == "dev":
+    # Add common development origins
+    allowed_origins.extend([
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+    ])
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Content-Type"] + get_all_cors_headers(),
+)
+
+# Include routers
 app.include_router(health_router, prefix='/api/v1')
 app.include_router(user_router, prefix='/api/v1')
 app.include_router(topic_router, prefix='/api/v1')

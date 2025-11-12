@@ -1,10 +1,10 @@
-from .auth import JWTPayload
+from .auth import SessionPayload
 from .topic import TopicRequest, TopicResponse
 from .user import UserCreate, UserResponse
 from .userdata import UsernameData, EmailData, InterestData
 
 __all__ = [
-    'JWTPayload',
+    'SessionPayload',
     'TopicRequest',
     'TopicResponse',
     'UserCreate',
@@ -12,5 +12,4 @@ __all__ = [
     'UsernameData',
     'EmailData',
     'InterestData',
-    
 ]

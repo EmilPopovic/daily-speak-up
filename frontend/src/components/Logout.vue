@@ -1,15 +1,39 @@
 <template>
   <div>
-    <Button @click="handleLogout" label="Log out" />
+    <Button label="Log out" icon="pi pi-sign-out" severity="danger" @click="handleLogout" :loading="loading" />
   </div>
 </template>
-<script setup>
-import { useAuth0 } from '@auth0/auth0-vue';
-import Button from 'primevue/button'; 
 
-const { logout } = useAuth0();
+<script>
+import { ref } from 'vue';
+import { logout } from '../auth';
+import { useRouter } from 'vue-router';
+import Button from 'primevue/button';
 
-const handleLogout = () => {
-  logout({ logoutParams: { returnTo: window.location.origin } });
+export default {
+  components: {
+    Button
+  },
+  setup() {
+    const router = useRouter();
+    const loading = ref(false);
+
+    const handleLogout = async () => {
+      loading.value = true;
+      try {
+        await logout();
+        router.push('/');
+      } catch (error) {
+        console.error('Logout error:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    return {
+      loading,
+      handleLogout
+    };
+  }
 };
 </script>

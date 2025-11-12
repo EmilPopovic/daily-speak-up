@@ -1,64 +1,82 @@
-import type { Auth0Client } from '@auth0/auth0-spa-js';
+import Session from 'supertokens-web-js/recipe/session';
+import ThirdParty from 'supertokens-web-js/recipe/thirdparty';
+import Passwordless from 'supertokens-web-js/recipe/passwordless';
 
-let clientPromise: Promise<Auth0Client> | null = null;
-
-function getClient() {
-  if (!clientPromise) {
-    clientPromise = import('@auth0/auth0-spa-js').then(m =>
-      m.createAuth0Client({
-        domain: import.meta.env.VITE_AUTH0_DOMAIN,
-        clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
-        authorizationParams: {
-          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-          redirect_uri: import.meta.env.VITE_AUTH0_REDIRECT_URI
-        },
-        cacheLocation: 'localstorage',
-        useRefreshTokens: true
-      })
-    ) as Promise<Auth0Client>;
-  }
-  return clientPromise;
-}
-
-export async function handleRedirectCallbackIfPresent() {
-  const client = await getClient();
-  const qp = new URLSearchParams(window.location.search);
-  if (qp.has('code') && qp.has('state')) {
-    await client.handleRedirectCallback();
-    window.history.replaceState({}, document.title, '/');
+export async function signInWithGoogle() {
+  try {
+    const authUrl = await ThirdParty.getAuthorisationURLWithQueryParamsAndSetState({
+      thirdPartyId: 'google',
+      frontendRedirectURI: `${window.location.origin}/auth/callback/google`
+    });
+    
+    // Redirect to Google OAuth
+    window.location.assign(authUrl);
+  } catch (err) {
+    console.error('Error initiating Google sign-in:', err);
+    throw err;
   }
 }
 
-export async function login() {
-  const client = await getClient();
-  await client.loginWithRedirect();
+export async function createPasswordlessCode(email: string) {
+  try {
+    const response = await Passwordless.createCode({
+      email
+    });
+    return response;
+  } catch (err) {
+    console.error('Error creating passwordless code:', err);
+    throw err;
+  }
+}
+
+export async function consumePasswordlessCode(userInputCode: string) {
+  try {
+    const response = await Passwordless.consumeCode({
+      userInputCode
+    });
+    return response;
+  } catch (err) {
+    console.error('Error consuming passwordless code:', err);
+    throw err;
+  }
+}
+
+export async function resendPasswordlessCode() {
+  try {
+    const response = await Passwordless.resendCode();
+    return response;
+  } catch (err) {
+    console.error('Error resending passwordless code:', err);
+    throw err;
+  }
 }
 
 export async function logout() {
-  const client = await getClient();
-  client.logout({ logoutParams: { returnTo: window.location.origin } });
+  await Session.signOut();
+  window.location.href = '/';
 }
 
 export async function isAuthenticated(): Promise<boolean> {
-  const client = await getClient();
-  if (!client) throw new Error('Auth0 client not initialized');
-  return client.isAuthenticated();
+  return await Session.doesSessionExist();
 }
 
-export async function getAccessToken(): Promise<string | null> {
-  const client = await getClient();
-  try {
-    return await client.getTokenSilently();
-  } catch {
-    return null;
+export async function getUserId(): Promise<string | undefined> {
+  if (await Session.doesSessionExist()) {
+    return await Session.getUserId();
   }
+  return undefined;
+}
+
+// For backward compatibility with existing code
+export async function getAccessToken(): Promise<string | null> {
+  // SuperTokens handles auth via cookies, no need for access tokens
+  return null;
 }
 
 export async function getUser(): Promise<any | null> {
-  const client = await getClient();
-  try {
-    return await client.getUser();
-  } catch {
-    return null;
+  if (await Session.doesSessionExist()) {
+    const userId = await Session.getUserId();
+    return { id: userId };
   }
+  return null;
 }

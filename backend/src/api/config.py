@@ -60,6 +60,67 @@ class Settings(BaseSettings):
         """Get Gemini model ID from environment."""
         return getenv('GEMINI_MODEL_ID', 'gemini-2.0-flash-exp')
     
+    @property
+    def CELERY_BROKER_URL(self) -> str:
+        return getenv('RABBIT_MQ_URL', 'amqp://guest:guest@rabbitmq:5672/')
+
+    @property
+    def CELERY_RESULT_BACKEND(self) -> str:
+        return getenv('CELERY_RESULT_BACKEND', 'rpc://')
+        
+    @property
+    def RESEND_API_KEY(self) -> str:
+        """Get Resend API key from environment."""
+        key = getenv('RESEND_API_KEY', '')
+        if not key:
+            raise ValueError('RESEND_API_KEY is not set in environment variables')
+        return key
+
+    @property
+    def RESEND_FROM_EMAIL(self) -> str:
+        return getenv('RESEND_FROM_EMAIL', 'noreply@dailyspeak.app')
+    
+    @property
+    def CELERY_RATE_LIMIT(self) -> str:
+        return getenv('CELERY_RATE_LIMIT', '2/s')
+    
+    # SuperTokens configuration
+    @property
+    def supertokens_connection_uri(self) -> str:
+        """SuperTokens Core connection URI"""
+        return getenv('SUPERTOKENS_CONNECTION_URI', 'http://localhost:3567')
+    
+    @property
+    def supertokens_api_key(self) -> str:
+        """SuperTokens API key for managed service (optional)"""
+        return getenv('SUPERTOKENS_API_KEY', '')
+    
+    @property
+    def app_name(self) -> str:
+        return getenv('APP_NAME', 'DailySpeakUp')
+    
+    @property
+    def api_domain(self) -> str:
+        return getenv('API_DOMAIN', 'http://localhost:8123')
+    
+    @property
+    def website_domain(self) -> str:
+        return getenv('WEBSITE_DOMAIN', 'http://localhost:5173')
+    
+    @property
+    def api_base_path(self) -> str:
+        return getenv('API_BASE_PATH', '/auth')
+    
+    @property
+    def google_client_id(self) -> str:
+        """Google OAuth client ID"""
+        return getenv('GOOGLE_CLIENT_ID', '')
+    
+    @property
+    def google_client_secret(self) -> str:
+        """Google OAuth client secret"""
+        return getenv('GOOGLE_CLIENT_SECRET', '')
+    
     # endregion
     
     class Config:

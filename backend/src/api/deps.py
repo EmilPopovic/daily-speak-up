@@ -4,12 +4,15 @@ from ..services import (
     GeminiService,
     S3Service,
 )
+from ..services.auth_service import get_session
+from ..services.email_impl.sender import ResendEmailSender
 from .config import get_settings
 
 _auth_service: AuthService | None = None
 _email_service: EmailService | None = None
 _gemini_service: GeminiService | None = None
 _s3_service: S3Service | None = None
+_resend_email_sender: ResendEmailSender | None = None
 
 def get_auth_service() -> AuthService:
     """Returns a preconfigured AuthService object"""
@@ -42,3 +45,14 @@ def get_s3_service() -> S3Service:
     if _s3_service is None:
         _s3_service = S3Service()
     return _s3_service
+
+def get_resend_email_sender() -> ResendEmailSender:
+    """Returns a preconfigured Resend ResendEmailSender object"""
+    global _resend_email_sender
+    if _resend_email_sender is None:
+        settings = get_settings()
+        _resend_email_sender = ResendEmailSender(
+            resend_api_key=settings.RESEND_API_KEY,
+            from_email=settings.RESEND_FROM_EMAIL
+        )
+    return _resend_email_sender

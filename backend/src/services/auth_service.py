@@ -1,69 +1,43 @@
-from fastapi.security import (
-    SecurityScopes,
-    HTTPAuthorizationCredentials,
-    HTTPBearer,
-)
-from fastapi import Depends, HTTPException, status
-from typing import Any, Dict, Optional
-from jose import jwt, JWTError
-from ..api.config import get_settings
-from ..schemas import JWTPayload
+from fastapi import Request, HTTPException, status
+from supertokens_python.recipe.session.framework.fastapi import verify_session
+from supertokens_python.recipe.session import SessionContainer
+from typing import Optional
 
 class UnauthenticatedException(HTTPException):
     def __init__(self, detail: str) -> None:
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
 
 class AuthService:
+    """
+    SuperTokens-based authentication service.
+    Uses session-based authentication instead of JWT verification.
+    """
     
     def __init__(self) -> None:
-        self.config = get_settings()
-        self.jwks: Optional[Dict[str, Any]] = None
-
-    async def _get_jwks(self) -> Dict[str, Any]:
-        """Get the JWKS from Auth0."""
-        if self.jwks is None:
-            import httpx
-            async with httpx.AsyncClient() as client:
-                jwks_url = f'https://{self.config.auth0_domain}/.well-known/jwks.json'
-                response = await client.get(jwks_url)
-                self.jwks = response.json()
-        assert self.jwks is not None
-        return self.jwks
-
-    async def verify(
-            self,
-            security_scopes: SecurityScopes,
-            token: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer())
-    ) -> JWTPayload:
-        if token is None:
-            raise UnauthenticatedException('No token')
-
-        try:
-            jwks = await self._get_jwks()
-            payload = jwt.decode(
-                token.credentials,
-                jwks,
-                algorithms=self.config.auth0_algorithms,
-                audience=self.config.auth0_api_audience,
-                issuer=self.config.auth0_issuer,
-            )
-        except JWTError as error:
-            raise UnauthenticatedException(str(error))
-
-        if len(security_scopes.scopes) > 0:
-            self._check_claims(payload, 'scope', security_scopes.scopes)
-
-        return JWTPayload(**payload)
+        pass
+    
+    async def verify(self, session: SessionContainer) -> dict:
+        """
+        Verify the user's session and return user info.
         
-    def _check_claims(self, payload, claim_name, expected_value):
-        if claim_name not in payload:
-            raise UnauthenticatedException(detail=f'No claim "{claim_name}" found in token')
+        Args:
+            session: The SuperTokens session container (injected by verify_session)
+        
+        Returns:
+            dict with 'sub' (user_id) and other session data
+        """
+        user_id = session.get_user_id()
+        
+        return {
+            'sub': user_id,
+            'session_handle': session.get_handle(),
+        }
 
-        payload_claim = payload[claim_name]
-
-        if claim_name == 'scope':
-            payload_claim = payload[claim_name].split(' ')
-
-        for value in expected_value:
-            if value not in payload_claim:
-                raise UnauthenticatedException(detail=f'Missing "{claim_name}" scope')
+# FastAPI dependency for protected routes
+async def get_session(request: Request):
+    """
+    FastAPI dependency that verifies the session.
+    Use with Depends() in route handlers.
+    """
+    session = await verify_session()(request)
+    return session
