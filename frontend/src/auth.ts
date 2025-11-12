@@ -1,5 +1,6 @@
 import Session from 'supertokens-web-js/recipe/session';
 import ThirdParty from 'supertokens-web-js/recipe/thirdparty';
+import Passwordless from 'supertokens-web-js/recipe/passwordless';
 
 export async function signInWithGoogle() {
   try {
@@ -12,6 +13,40 @@ export async function signInWithGoogle() {
     window.location.assign(authUrl);
   } catch (err) {
     console.error('Error initiating Google sign-in:', err);
+    throw err;
+  }
+}
+
+export async function createPasswordlessCode(email: string) {
+  try {
+    const response = await Passwordless.createCode({
+      email
+    });
+    return response;
+  } catch (err) {
+    console.error('Error creating passwordless code:', err);
+    throw err;
+  }
+}
+
+export async function consumePasswordlessCode(userInputCode: string) {
+  try {
+    const response = await Passwordless.consumeCode({
+      userInputCode
+    });
+    return response;
+  } catch (err) {
+    console.error('Error consuming passwordless code:', err);
+    throw err;
+  }
+}
+
+export async function resendPasswordlessCode() {
+  try {
+    const response = await Passwordless.resendCode();
+    return response;
+  } catch (err) {
+    console.error('Error resending passwordless code:', err);
     throw err;
   }
 }

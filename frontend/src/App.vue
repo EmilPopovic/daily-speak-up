@@ -3,6 +3,7 @@
   import { ref, onMounted, watch } from 'vue';
   import { useRoute } from 'vue-router';
   import GoogleLogin from './components/GoogleLogin.vue';
+  import PasswordlessLogin from './components/PasswordlessLogin.vue';
   import Logout from './components/Logout.vue';
   import User from './components/User.vue';
   import { isAuthenticated } from './auth';
@@ -33,6 +34,7 @@
       <div class="flex items-center gap-4 mr-8">
         <template v-if="!authenticated">
           <GoogleLogin />
+          <PasswordlessLogin />
         </template>
         <template v-else>
           <User />
