@@ -1,11 +1,11 @@
-from fastapi import APIRouter, FastAPI, File, UploadFile, HTTPException, Depends, status, Security, JSONResponse
-from backend.src.api.deps import get_auth_service
-from backend.src.models.user import User
+from fastapi import APIRouter, FastAPI, File, UploadFile, HTTPException, Depends, status, Security
+from ..deps import get_auth_service
+from ...models import User
 from ...schemas import UsernameData, EmailData, InterestData, JWTPayload
-from sqlalchemy import create_engine, Column, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from ...db import get_db
+from fastapi.responses import JSONResponse 
 
 
 router = APIRouter(prefix="/userdata", tags=["UserData"])
@@ -31,3 +31,4 @@ async def set_username(
              "message": "Username updated successfully", 
              'username': username_data.username}
    )
+
