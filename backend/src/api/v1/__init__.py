@@ -6,4 +6,5 @@ __all__ = [
     'health_router',
     'user_router',
     'topic_router',
+    'userdata_router',
 ]

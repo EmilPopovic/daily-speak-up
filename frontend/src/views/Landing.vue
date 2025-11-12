@@ -26,10 +26,7 @@ const teamSet = ref([
     <header class="relative">
       <div class="max-w-6xl mx-auto px-6 pt-28 pb-20 sm:pt-32 sm:pb-24 flex flex-col items-center">
        <nav class="absolute inset-x-0 top-0 flex justify-end px-6 sm:px-10 py-4 z-10">
-        <Login
-          class="p-button p-button-primary absolute top-6 right-6 sm:top-8 sm:right-10
-            transition-all duration-200 ease-in-out transform hover:scale-105 hover:brightness-90 shadow-sm"
-        />
+        <Login/>
        </nav>
 
 

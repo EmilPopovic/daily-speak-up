@@ -8,4 +8,5 @@ __all__ = [
     'TopicResponse',
     'UserCreate',
     'UserResponse',
+    'UserData',
 ]
