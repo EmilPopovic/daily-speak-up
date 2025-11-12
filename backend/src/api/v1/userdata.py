@@ -32,3 +32,21 @@ async def set_username(
              'username': username_data.username}
    )
 
+@router.post("/email", response_class=JSONResponse)
+async def set_email(
+   email_data: EmailData,
+   db: Session = Depends(get_db),
+   auth_result: JWTPayload = Security(get_auth_service)
+):
+   auth0_user_id = auth_result['sub']
+   user: User | None = db.query(User).filter(User.auth0_user_id == auth0_user_id).first()
+   if user is None:
+      raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found") 
+   user.email = email_data.email
+   db.commit()
+   db.refresh(user)
+   return JSONResponse(
+        content={
+             "message": "Email updated successfully", 
+             'email': email_data.email}
+   )
