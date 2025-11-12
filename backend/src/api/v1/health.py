@@ -6,17 +6,9 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import select, literal
 from ..config import get_settings
 from ...db import engine
-from ..deps import get_email_service
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=['health'], prefix='/health')
-
-@router.get('/email')
-async def send_email():
-    email = get_email_service()
-    for i in range(3):
-        email.send_email('emil.popovic@fer.unizg.hr', f'mail {i}')
-    return {'status': 'ok'}
 
 @router.get('')
 async def health():
