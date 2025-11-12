@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, status, Request
 from fastapi.responses import JSONResponse
 
@@ -8,11 +9,25 @@ from .api.v1 import (
     topic_router,
     userdata_router
 )
+from .db_manager import seed_default_interests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database with default data on startup"""
+    try:
+        logger.info("Running startup tasks...")
+        seed_default_interests()
+        logger.info("Startup tasks completed successfully")
+    except Exception as e:
+        logger.error(f"Error during startup: {e}")
+        pass
+    yield
+    logger.info("Application shutdown")
+
+app = FastAPI(lifespan=lifespan)
 
 app.include_router(health_router, prefix='/api/v1')
 app.include_router(user_router, prefix='/api/v1')
