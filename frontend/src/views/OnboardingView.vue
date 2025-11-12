@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router';
 import { api } from '../api';
 import Phase1 from '../components/Phase1.vue';
 import Phase2 from '../components/Phase2.vue';
+import ProgressSpinner from 'primevue/progressspinner';
+import Card from 'primevue/card';
 
 const router = useRouter();
 const phase = ref<number | null>(null);
@@ -21,13 +23,54 @@ function onPhase2Done() { router.replace('/'); }
 </script>
 
 <template>
-  <div v-if="!loading" class="mx-auto max-w-2xl p-6">
-    <div class="mb-6 flex gap-2">
-      <span class="px-3 py-1 rounded" :class="phase! >= 1 ? 'bg-black text-white' : 'bg-gray-200'">1. Profil</span>
-      <span class="px-3 py-1 rounded" :class="phase! >= 2 ? 'bg-black text-white' : 'bg-gray-200'">2. Interesi</span>
+  <div class="min-h-screen flex items-center justify-center p-4" style="background-color: #f0f4f8;">
+    <div v-if="!loading" class="w-full max-w-2xl">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold mb-2" style="color: #1e3a8a;">Dobrodošli</h1>
+        <p class="text-gray-600">Dovršite svoj profil u nekoliko koraka</p>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="mb-8 flex items-center justify-center gap-4">
+        <div class="flex items-center">
+          <div 
+            class="flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all duration-300"
+            :class="phase! >= 1 ? 'text-white shadow-lg' : 'bg-gray-200 text-gray-500'"
+            :style="phase! >= 1 ? 'background-color: #3b82f6;' : ''"
+          >
+            1
+          </div>
+          <span class="ml-2 font-medium" :class="phase! >= 1 ? '' : 'text-gray-500'" :style="phase! >= 1 ? 'color: #3b82f6;' : ''">Profil</span>
+        </div>
+        
+        <div class="w-16 h-1 rounded" :class="phase! >= 2 ? '' : 'bg-gray-300'" :style="phase! >= 2 ? 'background-color: #3b82f6;' : ''"></div>
+        
+        <div class="flex items-center">
+          <div 
+            class="flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all duration-300"
+            :class="phase! >= 2 ? 'text-white shadow-lg' : 'bg-gray-200 text-gray-500'"
+            :style="phase! >= 2 ? 'background-color: #3b82f6;' : ''"
+          >
+            2
+          </div>
+          <span class="ml-2 font-medium" :class="phase! >= 2 ? '' : 'text-gray-500'" :style="phase! >= 2 ? 'color: #3b82f6;' : ''">Interesi</span>
+        </div>
+      </div>
+
+      <!-- Content Card -->
+      <Card class="shadow-xl">
+        <template #content>
+          <Phase1 v-if="phase === 1" @done="onPhase1Done" />
+          <Phase2 v-else-if="phase === 2" @done="onPhase2Done" />
+        </template>
+      </Card>
     </div>
-    <Phase1 v-if="phase === 1" @done="onPhase1Done" />
-    <Phase2 v-else-if="phase === 2" @done="onPhase2Done" />
+    
+    <!-- Loading State -->
+    <div v-else class="flex flex-col items-center justify-center gap-4">
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="4" />
+      <p class="text-gray-600 text-lg">Učitavanje...</p>
+    </div>
   </div>
-  <div v-else class="p-8">Učitavanje…</div>
 </template>

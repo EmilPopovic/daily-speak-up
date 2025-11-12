@@ -1,46 +1,120 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { api } from '../api'
+import InputText from 'primevue/inputtext'
+import Button from 'primevue/button'
+import InlineMessage from 'primevue/inlinemessage'
 
 const emit = defineEmits<{(e:'done'): void}>()
 const name = ref('')
 const handle = ref('')
 const checking = ref(false)
 const handleAvailable = ref<boolean | null>(null)
+const submitting = ref(false)
 
 async function checkHandle() {
   if (!handle.value) return
   checking.value = true
-  const res = await api(`/handles/check?handle=${encodeURIComponent(handle.value)}`)
-  handleAvailable.value = res.available
-  checking.value = false
+  try {
+    const res = await api(`/handles/check?handle=${encodeURIComponent(handle.value)}`)
+    handleAvailable.value = res.available
+  } catch (error) {
+    console.error('Error checking handle:', error)
+  } finally {
+    checking.value = false
+  }
 }
 
 async function submit() {
   await checkHandle()
-  if (handleAvailable.value === false) return alert('Handle zauzet')
-  await api('/onboarding/profile', {
-    method: 'PATCH',
-    body: JSON.stringify({ name: name.value, handle: handle.value })
-  })
-  emit('done')
+  if (handleAvailable.value === false) return
+  
+  submitting.value = true
+  try {
+    await api('/onboarding/profile', {
+      method: 'PATCH',
+      body: JSON.stringify({ name: name.value, handle: handle.value })
+    })
+    emit('done')
+  } catch (error) {
+    console.error('Error updating profile:', error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
 <template>
-  <form class="space-y-4" @submit.prevent="submit">
-    <label class="block">
-      <span>Ime</span>
-      <input class="mt-1 w-full border p-2" v-model="name" required />
-    </label>
-    <label class="block">
-      <span>Handle</span>
-      <input class="mt-1 w-full border p-2" v-model="handle" required pattern="^[a-z0-9_]{3,20}$" @blur="checkHandle" />
+  <form class="space-y-6" @submit.prevent="submit">
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold mb-2" style="color: #1e40af;">Postavite svoj profil</h2>
+      <p style="color: #4b5563;">Recite nam nešto o sebi</p>
+    </div>
+
+    <!-- Name Field -->
+    <div class="space-y-2">
+      <label for="name" class="block text-sm font-semibold" style="color: #1f2937;">
+        Ime <span style="color: #ef4444;">*</span>
+      </label>
+      <InputText 
+        id="name"
+        v-model="name" 
+        placeholder="Unesite svoje ime"
+        class="w-full"
+        required
+        :disabled="submitting"
+      />
+      <small class="text-gray-500">Vaše puno ime ili ime koje želite koristiti</small>
+    </div>
+
+    <!-- Handle Field -->
+    <div class="space-y-2">
+      <label for="handle" class="block text-sm font-semibold" style="color: #1f2937;">
+        Korisničko ime (handle) <span style="color: #ef4444;">*</span>
+      </label>
+      <div class="relative">
+        <InputText 
+          id="handle"
+          v-model="handle" 
+          placeholder="npr. john_doe123"
+          class="w-full"
+          required
+          pattern="^[a-z0-9_]{3,20}$"
+          @blur="checkHandle"
+          :disabled="submitting"
+        />
+        <i 
+          v-if="checking" 
+          class="pi pi-spin pi-spinner absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+        ></i>
+      </div>
+      
+      <!-- Handle validation messages -->
+      <div v-if="handle && !checking" class="mt-2">
+        <InlineMessage v-if="handleAvailable === false" severity="error" class="w-full">
+          @{{ handle }} je već zauzeto
+        </InlineMessage>
+        <InlineMessage v-else-if="handleAvailable === true" severity="success" class="w-full">
+          @{{ handle }} je dostupno!
+        </InlineMessage>
+      </div>
+      
       <small class="text-gray-500">
-        <template v-if="checking">Provjera...</template>
-        <template v-else-if="handle">@{{ handle }} <span v-if="handleAvailable === false" style="color:#c00">zauzet</span></template>
+        3-20 znakova, dozvoljena slova, brojevi i donja crta
       </small>
-    </label>
-    <button class="mt-4 rounded border px-4 py-2" type="submit">Spremi i nastavi</button>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end pt-4">
+      <Button 
+        type="submit" 
+        label="Nastavi"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        :loading="submitting"
+        :disabled="!name || !handle || handleAvailable === false"
+        class="px-6"
+      />
+    </div>
   </form>
 </template>
