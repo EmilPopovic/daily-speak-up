@@ -8,7 +8,7 @@
   </div>
 
   <Button class="mt-[5rem] btnmy" 
-          label="Onboarding" 
+          label="Click Me!" 
           onmousedown="alert('Ovaj gumbić još nikaj ne dela... 😞')"/>
 </template>
 
