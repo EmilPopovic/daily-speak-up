@@ -5,7 +5,7 @@ config:
 classDiagram
     class User {
         +UUID id
-        +str auth0_user_id
+        +str supertokens_user_id
         +str email
         +str handle
         +UserRole role
@@ -117,7 +117,7 @@ classDiagram
     class EmailService {
         +send_email(to_mail, subject, message)
     }
-    class AuthService {
+    class SuperTokensService {
         +verify(token) JWTPayload
     }
     User "1" -- "0..*" Speech : creates
