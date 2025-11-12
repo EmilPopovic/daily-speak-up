@@ -71,7 +71,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    command: celery -A src.services.email_impl.celery_app:app worker -l INFO
+    command: celery -A src.services.email_impl.celery_app:app worker -l INFO --concurrency=1
     depends_on:
       - backend
       - rabbitmq

@@ -32,7 +32,7 @@ dev-rabbitmq:
 	docker run -d --name rabbitmq-dev -p 5672:5672 -p 15672:15672 rabbitmq:3-management || docker start rabbitmq-dev
 
 celery-worker:
-	cd backend && ../.venv/bin/celery -A src.services.email_impl.celery_app:app worker -l INFO
+	cd backend && ../.venv/bin/celery -A src.services.email_impl.celery_app:app worker -l INFO --concurrency=1
 
 stop-rabbitmq:
 	docker stop rabbitmq-dev || true
