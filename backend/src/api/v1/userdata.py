@@ -44,10 +44,11 @@ async def set_username(
    db.refresh(user)
 
    return JSONResponse(
-            content = {
-               "message": "Username updated successfully", 
-               'username': username_data.username
-            }
+      status_code=status.HTTP_200_OK,
+      content = {
+         "message": "Username updated successfully", 
+         'username': username_data.username
+      }
    )
 
 @router.post("/email", response_class=JSONResponse)
@@ -72,7 +73,9 @@ async def set_email(
 
    db.commit()
    db.refresh(user)
+
    return JSONResponse(
+      status_code=status.HTTP_200_OK,
       content={
          "message": "Email updated successfully", 
          'email': email_data.email
@@ -133,7 +136,7 @@ async def set_interests(
       db.rollback()
       raise HTTPException(
          status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-         detail=f"Error adding interests: {str(e)}"
+         detail=f"Error adding interests."
       )
    
    if len(unadded_interests) == 0:
