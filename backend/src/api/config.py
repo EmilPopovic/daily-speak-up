@@ -60,6 +60,30 @@ class Settings(BaseSettings):
         """Get Gemini model ID from environment."""
         return getenv('GEMINI_MODEL_ID', 'gemini-2.0-flash-exp')
     
+    @property
+    def CELERY_BROKER_URL(self) -> str:
+        return getenv('RABBIT_MQ_URL', 'amqp://guest:guest@rabbitmq:5672/')
+
+    @property
+    def CELERY_RESULT_BACKEND(self) -> str:
+        return getenv('CELERY_RESULT_BACKEND', 'rpc://')
+        
+    @property
+    def RESEND_API_KEY(self) -> str:
+        """Get Resend API key from environment."""
+        key = getenv('RESEND_API_KEY', '')
+        if not key:
+            raise ValueError('RESEND_API_KEY is not set in environment variables')
+        return key
+
+    @property
+    def RESEND_FROM_EMAIL(self) -> str:
+        return getenv('RESEND_FROM_EMAIL', 'noreply@dailyspeak.app')
+    
+    @property
+    def CELERY_RATE_LIMIT(self) -> str:
+        return getenv('CELERY_RATE_LIMIT', '2/s')
+    
     # endregion
     
     class Config:

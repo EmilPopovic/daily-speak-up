@@ -28,7 +28,6 @@ async def root():
             'docs': '/docs',
             'base': '/api/v1',
             'health': '/api/v1/health',
-            'topics': '/api/v1/topics'
         }
     )
 

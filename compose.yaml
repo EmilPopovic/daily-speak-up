@@ -1,4 +1,13 @@
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   
+      - "15672:15672"
+    networks:
+      - internal
+
   backend:
     build:
       context: backend
@@ -7,11 +16,16 @@ services:
       - 8123:8123
     restart: unless-stopped
     environment:
+      - RABBIT_MQ_URL=amqp://guest:guest@rabbitmq:5672//
       - ENVIRONMENT=${ENVIRONMENT:-dev}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
       - DATABASE_URL=${DATABASE_URL}
       - AUTH0_DOMAIN=${AUTH0_DOMAIN}
       - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
       - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8123/api/v1/health"]
       interval: 30s
@@ -23,6 +37,8 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    networks:
+      - internal
 
   frontend:
     build:
@@ -48,3 +64,30 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    networks:
+      - internal
+
+  celery_worker:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    command: celery -A src.services.email_impl.celery_app:app worker -l INFO --concurrency=1
+    depends_on:
+      - backend
+      - rabbitmq
+    environment:
+      - RABBIT_MQ_URL=amqp://guest:guest@rabbitmq:5672//
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+      - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT}
+    networks:
+      - internal
+
+networks:
+  internal:
