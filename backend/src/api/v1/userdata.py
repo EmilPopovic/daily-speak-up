@@ -1,11 +1,12 @@
-from fastapi import APIRouter, FastAPI, File, UploadFile, HTTPException, Depends, status, Security
-from ..deps import get_auth_service
+from fastapi import APIRouter, FastAPI, File, UploadFile, HTTPException, Depends, status
+from ..deps import get_session
 from ...models import User, Interest, UserInterest
-from ...schemas import UsernameData, EmailData, InterestData, JWTPayload
+from ...schemas import UsernameData, EmailData, InterestData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from ...db import get_db
-from fastapi.responses import JSONResponse 
+from fastapi.responses import JSONResponse
+from supertokens_python.recipe.session import SessionContainer 
 
 
 router = APIRouter(prefix="/userdata", tags=["UserData"])
@@ -14,12 +15,12 @@ router = APIRouter(prefix="/userdata", tags=["UserData"])
 async def set_username(
    username_data: UsernameData,
    db: Session = Depends(get_db),
-   auth_result: JWTPayload = Security(get_auth_service().verify)
+   session: SessionContainer = Depends(get_session)
 ):
-   auth0_user_id = auth_result['sub']
+   supertokens_user_id = session.get_user_id()
    
    user: User | None = db.query(User).filter(
-      User.auth0_user_id == auth0_user_id
+      User.supertokens_user_id == supertokens_user_id
    ).first()
 
    if user is None:
@@ -55,12 +56,12 @@ async def set_username(
 async def set_email(
    email_data: EmailData,
    db: Session = Depends(get_db),
-   auth_result: JWTPayload = Security(get_auth_service().verify)
+   session: SessionContainer = Depends(get_session)
 ):
-   auth0_user_id = auth_result['sub']
+   supertokens_user_id = session.get_user_id()
 
    user: User | None = db.query(User).filter(
-      User.auth0_user_id == auth0_user_id
+      User.supertokens_user_id == supertokens_user_id
    ).first()
 
    if user is None:
@@ -86,12 +87,12 @@ async def set_email(
 async def set_interests(
    interest_data: InterestData,
    db: Session = Depends(get_db),
-   auth_result: JWTPayload = Security(get_auth_service().verify)
+   session: SessionContainer = Depends(get_session)
 ):
-   auth0_user_id = auth_result['sub']
+   supertokens_user_id = session.get_user_id()
 
    user: User | None = db.query(User).filter(
-      User.auth0_user_id == auth0_user_id
+      User.supertokens_user_id == supertokens_user_id
    ).first()
 
    if user is None:

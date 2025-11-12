@@ -48,8 +48,8 @@ export default {
               });
 
               if (registerResponse.ok) {
-                // User successfully registered in database
-                router.push('/');
+                // User successfully registered in database, go to onboarding
+                router.push('/onboarding');
               } else {
                 const errorData = await registerResponse.json();
                 error.value = errorData.detail || 'Failed to register user in database';
@@ -59,7 +59,7 @@ export default {
               error.value = 'Failed to complete registration. Please try again.';
             }
           } else {
-            // Existing user, just redirect to home
+            // Existing user, router guard will handle redirect based on onboarding status
             router.push('/');
           }
         } else if (response.status === 'NO_EMAIL_GIVEN_BY_PROVIDER') {

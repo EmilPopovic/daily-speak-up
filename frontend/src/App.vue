@@ -25,19 +25,5 @@
 </script>
 
 <template>
-    <div class="flex justify-between items-center p-4">
-      <ul class="m-16">
-        <li class="mb-2 hover:scale-105"><RouterLink to="/">Početna</RouterLink></li>
-        <li class="mt-2 hover:scale-105"><RouterLink to="/about">O nama</RouterLink></li>
-      </ul>
-      <div class="flex items-center gap-4 mr-8">
-        <template v-if="!authenticated">
-          <LoginModal />
-        </template>
-        <template v-else>
-          <User />
-          <Logout />
-        </template>
-      </div>
-    </div>
+  <RouterView />
 </template>

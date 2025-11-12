@@ -58,6 +58,11 @@ onMounted(async () => {
           
           if (registerResponse.ok) {
             console.log('✓ New user registered in database');
+            // New user - redirect to onboarding
+            setTimeout(() => {
+              router.push('/onboarding');
+            }, 1000);
+            return;
           } else {
             console.error('Failed to register user');
           }
@@ -66,6 +71,7 @@ onMounted(async () => {
         }
       }
       
+      // Existing user - router guard will handle redirect based on onboarding status
       setTimeout(() => {
         router.push('/');
       }, 1000);

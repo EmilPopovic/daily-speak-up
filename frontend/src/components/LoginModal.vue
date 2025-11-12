@@ -243,6 +243,7 @@ const handleCodeVerification = async () => {
       }
       
       closeModal();
+      // Router guard will redirect based on onboarding status
       router.push('/');
     } else if (response.status === 'INCORRECT_USER_INPUT_CODE_ERROR') {
       errorMessage.value = 'Invalid code. Please try again.';

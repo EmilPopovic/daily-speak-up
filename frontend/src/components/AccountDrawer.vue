@@ -1,7 +1,7 @@
 <script setup>
     import Drawer from 'primevue/drawer';
     import Button from 'primevue/button';
-    import Login from './Login.vue';
+    import Login from './LoginModal.vue';
     import Logout from './Logout.vue';
     import User from './User.vue';
     import { RouterLink } from 'vue-router';

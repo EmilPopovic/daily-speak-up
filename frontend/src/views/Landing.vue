@@ -3,7 +3,7 @@ import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, computed } from 'vue'
-import Login from '../components/Login.vue'
+import Login from '../components/LoginModal.vue'
 
 const router = useRouter()
 const goToOnboarding = () => router.push('/onboarding')
