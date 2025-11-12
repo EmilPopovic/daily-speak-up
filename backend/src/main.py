@@ -12,7 +12,10 @@ from .api.v1 import (
     health_router,
     user_router,
     topic_router,
-    userdata_router
+    userdata_router,
+    onboarding_router,
+    handles_router,
+    interests_router
 )
 from .services.supertokens_service import init_supertokens
 from .api.config import get_settings
@@ -70,6 +73,9 @@ app.include_router(health_router, prefix='/api/v1')
 app.include_router(user_router, prefix='/api/v1')
 app.include_router(topic_router, prefix='/api/v1')
 app.include_router(userdata_router, prefix='/api/v1')
+app.include_router(onboarding_router, prefix='/api/v1')
+app.include_router(handles_router, prefix='/api/v1')
+app.include_router(interests_router, prefix='/api/v1')
 
 @app.get('/', tags=['Root'])
 async def root():
