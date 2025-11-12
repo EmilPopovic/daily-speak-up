@@ -1,16 +1,26 @@
 <script setup>
   import { RouterView, RouterLink } from 'vue-router';
-  import { ref, onMounted } from 'vue';
-  import Login from './components/Login.vue';
-  import Signup from './components/Signup.vue';
+  import { ref, onMounted, watch } from 'vue';
+  import { useRoute } from 'vue-router';
+  import GoogleLogin from './components/GoogleLogin.vue';
   import Logout from './components/Logout.vue';
   import User from './components/User.vue';
   import { isAuthenticated } from './auth';
 
+  const route = useRoute();
   const authenticated = ref(false);
 
-  onMounted(async () => {
+  const checkAuth = async () => {
     authenticated.value = await isAuthenticated();
+  };
+
+  onMounted(async () => {
+    await checkAuth();
+  });
+
+  // Re-check authentication when route changes (e.g., after OAuth callback)
+  watch(() => route.path, async () => {
+    await checkAuth();
   });
 </script>
 
@@ -22,8 +32,7 @@
       </ul>
       <div class="flex items-center gap-4 mr-8">
         <template v-if="!authenticated">
-          <Login />
-          <Signup />
+          <GoogleLogin />
         </template>
         <template v-else>
           <User />

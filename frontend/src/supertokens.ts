@@ -1,6 +1,6 @@
 import SuperTokens from 'supertokens-web-js';
 import Session from 'supertokens-web-js/recipe/session';
-import EmailPassword from 'supertokens-web-js/recipe/emailpassword';
+import ThirdParty from 'supertokens-web-js/recipe/thirdparty';
 
 export function initSuperTokens() {
   const env = {
@@ -15,7 +15,7 @@ export function initSuperTokens() {
       apiBasePath: '/auth'
     },
     recipeList: [
-      EmailPassword.init(),
+      ThirdParty.init(),
       Session.init()
     ]
   });

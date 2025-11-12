@@ -1,52 +1,18 @@
 import Session from 'supertokens-web-js/recipe/session';
-import EmailPassword from 'supertokens-web-js/recipe/emailpassword';
+import ThirdParty from 'supertokens-web-js/recipe/thirdparty';
 
-export async function signUp(email: string, password: string) {
+export async function signInWithGoogle() {
   try {
-    const response = await EmailPassword.signUp({
-      formFields: [{
-        id: "email",
-        value: email
-      }, {
-        id: "password",
-        value: password
-      }]
+    const authUrl = await ThirdParty.getAuthorisationURLWithQueryParamsAndSetState({
+      thirdPartyId: 'google',
+      frontendRedirectURI: `${window.location.origin}/auth/callback/google`
     });
-
-    if (response.status === "OK") {
-      return { success: true, user: response.user };
-    } else if (response.status === "FIELD_ERROR") {
-      const errors = response.formFields.map(f => f.error).filter(Boolean).join(', ');
-      return { success: false, error: errors || "Sign up failed" };
-    } else {
-      return { success: false, error: "Sign up failed" };
-    }
-  } catch (error) {
-    return { success: false, error: "An error occurred during sign up" };
-  }
-}
-
-export async function signIn(email: string, password: string) {
-  try {
-    const response = await EmailPassword.signIn({
-      formFields: [{
-        id: "email",
-        value: email
-      }, {
-        id: "password",
-        value: password
-      }]
-    });
-
-    if (response.status === "OK") {
-      return { success: true, user: response.user };
-    } else if (response.status === "WRONG_CREDENTIALS_ERROR") {
-      return { success: false, error: "Invalid email or password" };
-    } else {
-      return { success: false, error: "Sign in failed" };
-    }
-  } catch (error) {
-    return { success: false, error: "An error occurred during sign in" };
+    
+    // Redirect to Google OAuth
+    window.location.assign(authUrl);
+  } catch (err) {
+    console.error('Error initiating Google sign-in:', err);
+    throw err;
   }
 }
 

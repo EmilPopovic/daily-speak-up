@@ -40,17 +40,27 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# Add CORS middleware (must be before SuperTokens middleware)
+# Add SuperTokens middleware FIRST
+app.add_middleware(get_middleware())
+
+# Add CORS middleware AFTER SuperTokens middleware
+# Allow both configured domain and localhost for development
+allowed_origins = [settings.website_domain]
+if settings.environment == "dev":
+    # Add common development origins
+    allowed_origins.extend([
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+    ])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.website_domain],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "PUT", "POST", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["Content-Type"] + get_all_cors_headers(),
 )
-
-# Add SuperTokens middleware
-app.add_middleware(get_middleware())
 
 # Include routers
 app.include_router(health_router, prefix='/api/v1')

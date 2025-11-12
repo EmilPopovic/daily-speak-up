@@ -109,7 +109,17 @@ class Settings(BaseSettings):
     
     @property
     def api_base_path(self) -> str:
-        return getenv('API_BASE_PATH', '/api/v1/auth')
+        return getenv('API_BASE_PATH', '/auth')
+    
+    @property
+    def google_client_id(self) -> str:
+        """Google OAuth client ID"""
+        return getenv('GOOGLE_CLIENT_ID', '')
+    
+    @property
+    def google_client_secret(self) -> str:
+        """Google OAuth client secret"""
+        return getenv('GOOGLE_CLIENT_SECRET', '')
     
     # endregion
     
