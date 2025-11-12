@@ -1,20 +1,15 @@
 <template>
   <div>
-    <button @click="login">Log in</button>
+    <Button @click="handleLogin" label="Log in" />
   </div>
 </template>
-<script>
+<script setup>
   import { useAuth0 } from '@auth0/auth0-vue';
+  import Button from 'primevue/button'; 
 
-  export default {
-    setup() {
-      const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect } = useAuth0();
 
-      return {
-        login: () => {
-          loginWithRedirect();
-        }
-      };
-    }
+  const handleLogin = () => {
+    loginWithRedirect();
   };
 </script>

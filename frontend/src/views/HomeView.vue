@@ -1,18 +1,27 @@
 <script setup lang="ts">
-  import Button from "primevue/button"
+  import MainFrame from '../components/MainFrame.vue';
+  import FriendsFrame from '../components/FriendsFrame.vue';
+  import Divider from 'primevue/divider';
 </script>
 
 <template>
-  <div class="text-shadow-sm font-extrabold">
-    <h1>DailySpeakUp</h1>
+  <div class="flex flex-col lg:flex-row w-full h-full">
+    <MainFrame />
+    <div class="hidden lg:block">
+      <Divider layout="vertical" :pt="{root:{class:'divider'}}"/>
+    </div>
+    <div class="block lg:hidden">
+      <Divider layout="horizontal"  :pt="{root:{class:'divider'}}" />
+    </div>
+    <FriendsFrame />
   </div>
-
-  <Button class="mt-[5rem] btnmy" 
-          label="Click Me!" 
-          onmousedown="alert('Ovaj gumbić još nikaj ne dela... 😞')"/>
 </template>
 
 <style scoped>
+.divider{
+  --p-divider-vertical-margin:0 0 0 0;
+  --p-divider-horizontal-margin:0 0 0 0;
+}
 .btnmy {
   --p-button-border-radius: 9rem;
 }
