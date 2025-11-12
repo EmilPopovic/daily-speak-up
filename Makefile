@@ -11,8 +11,8 @@ npm:
 	cd frontend && npm install && cd ..
 
 dev:
-	make dev-rabbitmq &
-	make dev-supertokens &
+	make dev-rabbitmq
+	make dev-supertokens
 	make backend &
 	make celery-worker &
 	make frontend
@@ -24,8 +24,6 @@ down:
 	docker compose -f 'compose.yaml' down
 
 backend:
-	@make dev-rabbitmq > /dev/null 2>&1
-	@make dev-supertokens > /dev/null 2>&1
 	cd backend && ../.venv/bin/python -m uvicorn src.main:app --host 0.0.0.0 --port 8123 --reload
 
 frontend:
