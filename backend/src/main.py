@@ -11,10 +11,12 @@ from supertokens_python.framework.fastapi import get_middleware
 from .api.v1 import (
     health_router,
     user_router,
-    topic_router
+    topic_router,
+    userdata_router
 )
 from .services.supertokens_service import init_supertokens
 from .api.config import get_settings
+from .db_manager import seed_default_interests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,10 +33,11 @@ async def lifespan(app: FastAPI):
     """Lifespan events"""
     try:
         logger.info("Running startup tasks...")
+        seed_default_interests()
         logger.info("Startup tasks completed successfully")
     except Exception as e:
         logger.error(f"Error during startup: {e}")
-        raise
+        pass
     yield
     logger.info("Application shutdown")
 
@@ -66,6 +69,7 @@ app.add_middleware(
 app.include_router(health_router, prefix='/api/v1')
 app.include_router(user_router, prefix='/api/v1')
 app.include_router(topic_router, prefix='/api/v1')
+app.include_router(userdata_router, prefix='/api/v1')
 
 @app.get('/', tags=['Root'])
 async def root():

@@ -9,3 +9,4 @@ celery
 resend
 supertokens-python
 pydantic[email]
+email-validator

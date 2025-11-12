@@ -1,7 +1,7 @@
 from .auth import SessionPayload
 from .topic import TopicRequest, TopicResponse
 from .user import UserCreate, UserResponse
-from .userdata import UsernameData, EmailData
+from .userdata import UsernameData, EmailData, InterestData
 
 __all__ = [
     'SessionPayload',
@@ -11,4 +11,5 @@ __all__ = [
     'UserResponse',
     'UsernameData',
     'EmailData',
+    'InterestData',
 ]

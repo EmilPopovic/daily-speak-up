@@ -2,9 +2,28 @@ import os
 import sys
 import logging
 from sqlalchemy import MetaData
+from sqlalchemy.orm import Session
 from .db import engine, Base
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_INTERESTS = [
+    {'slug': 'technology', 'name': 'Technology'},
+    {'slug': 'sports', 'name': 'Sports'},
+    {'slug': 'music', 'name': 'Music'},
+    {'slug': 'movies', 'name': 'Movies'},
+    {'slug': 'books', 'name': 'Books'},
+    {'slug': 'travel', 'name': 'Travel'},
+    {'slug': 'food', 'name': 'Food'},
+    {'slug': 'art', 'name': 'Art'},
+    {'slug': 'gaming', 'name': 'Gaming'},
+    {'slug': 'fitness', 'name': 'Fitness'},
+    {'slug': 'science', 'name': 'Science'},
+    {'slug': 'fashion', 'name': 'Fashion'},
+    {'slug': 'photography', 'name': 'Photography'},
+    {'slug': 'nature', 'name': 'Nature'},
+    {'slug': 'politics', 'name': 'Politics'},
+]
 
 def drop_all_tables():
     """Drop all database tables"""
@@ -24,6 +43,34 @@ def drop_all_tables():
         logger.error(f'Failed to drop tables: {e}')
         raise
 
+def seed_default_interests():
+    from .models import Interest
+    
+    try:
+        logger.info('Seeding default interests...')
+        
+        with Session(engine) as session:
+            existing_count = session.query(Interest).count()
+            
+            if existing_count > 0:
+                logger.info(f'Interests table not empty. Skipping seeding.')
+                return
+            
+            interests_created = 0
+            for interest_data in DEFAULT_INTERESTS:
+                existing = session.query(Interest).filter_by(slug=interest_data['slug']).first()
+                if not existing:
+                    interest = Interest(**interest_data)
+                    session.add(interest)
+                    interests_created += 1
+            
+            session.commit()
+            logger.info(f'Successfully created {interests_created} default interests!')
+            
+    except Exception as e:
+        logger.error(f'Failed to seed default interests: {e}')
+        raise
+
 def create_all_tables():
     """Create all database tables"""
     from . import models  # noqa: F401
@@ -38,6 +85,8 @@ def create_all_tables():
         logger.info('Created tables:')
         for table_name in Base.metadata.tables.keys():
             logger.info(f'  - {table_name}')
+        
+        seed_default_interests()
 
     except Exception as e:
         logger.error(f'Failed to create tables: {e}')
