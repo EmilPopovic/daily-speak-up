@@ -10,7 +10,6 @@ services:
 
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
-    container_name: supertokens
     ports:
       - "3567:3567"
     environment:

@@ -7,7 +7,6 @@ services:
 
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
-    container_name: supertokens
     environment:
       POSTGRESQL_CONNECTION_URI: "${SUPERTOKENS_DATABASE_URL}"
       API_KEYS: "${SUPERTOKENS_API_KEY}"
