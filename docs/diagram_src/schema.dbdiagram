@@ -28,7 +28,7 @@ Table users {
 
   role user_role [not null]
   
-  auth0_user_id text [not null]
+  supertokens_user_id text [not null]
 
   email text [not null, unique]
   email_changed_at timestamp [default: null]
