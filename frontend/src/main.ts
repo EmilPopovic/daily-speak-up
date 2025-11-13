@@ -6,6 +6,7 @@ import Lara from '@primeuix/themes/lara';
 import { definePreset } from '@primeuix/themes';
 import router from './router';
 import { initSuperTokens } from './supertokens';
+import 'primeicons/primeicons.css'
 
 // DailySpeakUp Color System (from email templates)
 // Primary: #3b82f6 (blue-500)

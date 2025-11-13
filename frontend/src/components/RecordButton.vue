@@ -73,14 +73,18 @@ const generateTopic = async () => {
 
 <template>
   <div
-    class="relative w-[30vw] h-[30vw] 2xl:w-[20vw] 2xl:h-[20vw] flex justify-center items-center mx-auto"
-    @click="startTimer"
+    class="relative flex justify-center items-center mx-auto hover:cursor-pointer"
+    
   >
+
     <!-- pozadina gumba -->
     <div
-      class="absolute inset-0 rounded-full bg-gradient-to-b from-sky-200 to-sky-400 shadow-lg
+      class="w-[30vw] h-[30vw] 2xl:w-[20vw] 2xl:h-[20vw] rounded-full 
+             bg-gradient-to-b from-sky-200 to-sky-400 shadow-lg 
              hover:cursor-pointer hover:scale-105 transition duration-300"
-    ></div>
+    >
+      <span class="pi pi-microphone" style="color: white; font-size: 12vw; position: center;" ></span>
+    </div>
 
     <!-- plava kružnica (progress ring) -->
     <svg
@@ -101,7 +105,7 @@ const generateTopic = async () => {
       />
     </svg>
 
-    <div class="pi pi-microphone z-10" style="color: white; font-size: 16vw"></div>
+    
 
     <button
       v-if="showCancel"
@@ -115,4 +119,7 @@ const generateTopic = async () => {
 </template>
 
 <style scoped>
+div {
+  border: solid 1px black;
+}
 </style>
