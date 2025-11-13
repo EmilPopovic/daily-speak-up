@@ -56,7 +56,7 @@
               </div>
             </div>
 
-            <div v-if="!showCodeInput">
+            <div v-if="!emailSent">
               <label class="block text-sm font-medium text-gray-700 mb-2">Email address</label>
               <input
                 v-model="email"
@@ -77,61 +77,33 @@
                   </svg>
                   <span>Sending...</span>
                 </span>
-                <span v-else>Continue</span>
+                <span v-else>Send Magic Link</span>
               </button>
             </div>
 
-            <div v-else>
-              <button 
-                @click="showCodeInput = false" 
-                class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 mb-4"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <div v-else class="text-center">
+              <div class="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                <svg class="w-12 h-12 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Back
-              </button>
-              
-              <div class="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                <p class="text-sm text-blue-800">
-                  We've sent a verification code to <strong>{{ email }}</strong>
+                <p class="text-sm text-green-800 font-medium">
+                  Magic link sent!
+                </p>
+                <p class="text-sm text-green-700 mt-1">
+                  Check your email at <strong>{{ email }}</strong>
                 </p>
               </div>
-
-              <label class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
-              <input
-                v-model="code"
-                type="text"
-                placeholder="Enter 6-digit code"
-                maxlength="6"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-center text-2xl tracking-widest font-mono"
-                @keyup.enter="handleCodeVerification"
-              />
+              
+              <p class="text-sm text-gray-600 mb-4">
+                Click the link in your email to sign in. You can close this window.
+              </p>
               
               <button
-                @click="handleCodeVerification"
-                :disabled="code.length !== 6 || codeLoading"
-                class="w-full mt-4 px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center"
+                @click="closeModal"
+                class="w-full px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
               >
-                <span v-if="codeLoading" class="flex items-center gap-2">
-                  <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  <span>Verifying...</span>
-                </span>
-                <span v-else>Verify</span>
+                Close
               </button>
-
-              <div class="mt-4 text-center">
-                <button
-                  @click="handleResendCode"
-                  :disabled="resendCooldown > 0"
-                  class="text-sm text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
-                >
-                  {{ resendCooldown > 0 ? `Resend code in ${resendCooldown}s` : 'Resend code' }}
-                </button>
-              </div>
             </div>
 
             <div v-if="errorMessage" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -146,18 +118,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { signInWithGoogle, createPasswordlessCode, consumePasswordlessCode, resendPasswordlessCode } from '../auth';
-import { useRouter } from 'vue-router';
+import { signInWithGoogle, createPasswordlessCode } from '../auth';
 
-const router = useRouter();
 const showModal = ref(false);
 const email = ref('');
-const code = ref('');
-const showCodeInput = ref(false);
+const emailSent = ref(false);
 const emailLoading = ref(false);
-const codeLoading = ref(false);
 const errorMessage = ref('');
-const resendCooldown = ref(0);
 
 const handleEscapeKey = (event: KeyboardEvent) => {
   if (event.key === 'Escape' && showModal.value) {
@@ -180,11 +147,9 @@ const closeModal = () => {
 
 const resetForm = () => {
   email.value = '';
-  code.value = '';
-  showCodeInput.value = false;
+  emailSent.value = false;
   errorMessage.value = '';
   emailLoading.value = false;
-  codeLoading.value = false;
 };
 
 const handleGoogleLogin = async () => {
@@ -204,78 +169,14 @@ const handleEmailLogin = async () => {
   try {
     const response = await createPasswordlessCode(email.value);
     if (response.status === 'OK') {
-      showCodeInput.value = true;
+      emailSent.value = true;
+    } else {
+      errorMessage.value = 'Failed to send magic link. Please try again.';
     }
   } catch (error: any) {
-    errorMessage.value = error.message || 'Failed to send verification code';
+    errorMessage.value = error.message || 'Failed to send magic link';
   } finally {
     emailLoading.value = false;
-  }
-};
-
-const handleCodeVerification = async () => {
-  if (code.value.length !== 6) return;
-  
-  codeLoading.value = true;
-  errorMessage.value = '';
-  
-  try {
-    const response = await consumePasswordlessCode(code.value);
-    
-    if (response.status === 'OK') {
-      // Check if this is a new user
-      if (response.createdNewRecipeUser) {
-        try {
-          const apiDomain = import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123';
-          await fetch(`${apiDomain}/api/v1/user/register`, {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: response.user.emails[0]
-            })
-          });
-        } catch (regError) {
-          console.error('Failed to register user:', regError);
-        }
-      }
-      
-      closeModal();
-      // Router guard will redirect based on onboarding status
-      router.push('/');
-    } else if (response.status === 'INCORRECT_USER_INPUT_CODE_ERROR') {
-      errorMessage.value = 'Invalid code. Please try again.';
-    } else if (response.status === 'EXPIRED_USER_INPUT_CODE_ERROR') {
-      errorMessage.value = 'Code expired. Please request a new one.';
-    } else {
-      errorMessage.value = 'Verification failed. Please try again.';
-    }
-  } catch (error: any) {
-    errorMessage.value = error.message || 'Failed to verify code';
-  } finally {
-    codeLoading.value = false;
-  }
-};
-
-const handleResendCode = async () => {
-  if (resendCooldown.value > 0) return;
-  
-  try {
-    await resendPasswordlessCode();
-    errorMessage.value = '';
-    
-    // Start cooldown
-    resendCooldown.value = 30;
-    const interval = setInterval(() => {
-      resendCooldown.value--;
-      if (resendCooldown.value <= 0) {
-        clearInterval(interval);
-      }
-    }, 1000);
-  } catch (error: any) {
-    errorMessage.value = error.message || 'Failed to resend code';
   }
 };
 </script>

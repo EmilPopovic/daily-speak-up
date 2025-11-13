@@ -12,6 +12,10 @@ const checking = ref(false)
 const handleAvailable = ref<boolean | null>(null)
 const submitting = ref(false)
 
+function onHandleInput() {
+  handleAvailable.value = null
+}
+
 async function checkHandle() {
   if (!handle.value) return
   checking.value = true
@@ -26,8 +30,13 @@ async function checkHandle() {
 }
 
 async function submit() {
-  await checkHandle()
-  if (handleAvailable.value === false) return
+  if (handleAvailable.value === null) {
+    await checkHandle()
+  }
+  
+  if (handleAvailable.value !== true) {
+    return
+  }
   
   submitting.value = true
   try {
@@ -80,6 +89,7 @@ async function submit() {
           class="w-full"
           required
           pattern="^[a-z0-9_]{3,20}$"
+          @input="onHandleInput"
           @blur="checkHandle"
           :disabled="submitting"
         />
@@ -111,8 +121,8 @@ async function submit() {
         label="Nastavi"
         icon="pi pi-arrow-right"
         iconPos="right"
-        :loading="submitting"
-        :disabled="!name || !handle || handleAvailable === false"
+        :loading="submitting || checking"
+        :disabled="!name || !handle"
         class="px-6"
       />
     </div>
