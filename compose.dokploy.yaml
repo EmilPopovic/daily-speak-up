@@ -27,21 +27,26 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      - RABBIT_MQ_URL=amqp://guest:guest@rabbitmq:5672//
       - ENVIRONMENT=${ENVIRONMENT:-production}
-      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
-      - RESEND_API_KEY=${RESEND_API_KEY}
       - DATABASE_URL=${DATABASE_URL}
-      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
-      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
-      - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-      - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT}
-      - SUPERTOKENS_CONNECTION_URI=http://supertokens:3567
+      - SUPERTOKENS_DATABASE_URL=${SUPERTOKENS_DATABASE_URL}
+      - SUPERTOKENS_CONNECTION_URI=${SUPERTOKENS_CONNECTION_URI:-http://supertokens:3567}
       - SUPERTOKENS_API_KEY=${SUPERTOKENS_API_KEY}
       - API_DOMAIN=${API_DOMAIN}
       - WEBSITE_DOMAIN=${WEBSITE_DOMAIN}
+      - API_BASE_PATH=${API_BASE_PATH:-/auth}
       - APP_NAME=${APP_NAME:-DailySpeakUp}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL_ID=${GEMINI_MODEL_ID:-gemini-2.0-flash-exp}
+      - BACKEND_URL=${BACKEND_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-auth@dailyspeak.app}
+      - RABBIT_MQ_URL=${RABBIT_MQ_URL:-amqp://guest:guest@rabbitmq:5672/}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-rpc://}
+      - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT:-2/s}
     depends_on:
       supertokens:
         condition: service_healthy
@@ -64,8 +69,6 @@ services:
       context: frontend
       dockerfile: Dockerfile
       args:
-        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
-        - VITE_AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
         - VITE_API_DOMAIN=${VITE_API_DOMAIN}
         - VITE_WEBSITE_DOMAIN=${VITE_WEBSITE_DOMAIN}
     restart: unless-stopped
@@ -96,21 +99,26 @@ services:
       - rabbitmq
       - supertokens
     environment:
-      - RABBIT_MQ_URL=amqp://guest:guest@rabbitmq:5672//
       - ENVIRONMENT=${ENVIRONMENT:-production}
-      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
-      - RESEND_API_KEY=${RESEND_API_KEY}
       - DATABASE_URL=${DATABASE_URL}
-      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
-      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
-      - AUTH0_ALGORITHMS=${AUTH0_ALGORITHMS}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-      - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT}
-      - SUPERTOKENS_CONNECTION_URI=http://supertokens:3567
+      - SUPERTOKENS_DATABASE_URL=${SUPERTOKENS_DATABASE_URL}
+      - SUPERTOKENS_CONNECTION_URI=${SUPERTOKENS_CONNECTION_URI:-http://supertokens:3567}
       - SUPERTOKENS_API_KEY=${SUPERTOKENS_API_KEY}
       - API_DOMAIN=${API_DOMAIN}
       - WEBSITE_DOMAIN=${WEBSITE_DOMAIN}
+      - API_BASE_PATH=${API_BASE_PATH:-/auth}
       - APP_NAME=${APP_NAME:-DailySpeakUp}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL_ID=${GEMINI_MODEL_ID:-gemini-2.0-flash-exp}
+      - BACKEND_URL=${BACKEND_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-auth@dailyspeak.app}
+      - RABBIT_MQ_URL=${RABBIT_MQ_URL:-amqp://guest:guest@rabbitmq:5672/}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-rpc://}
+      - CELERY_RATE_LIMIT=${CELERY_RATE_LIMIT:-2/s}
     networks:
       - internal
 
