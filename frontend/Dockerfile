@@ -4,8 +4,8 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Add build arguments
-ARG VITE_AUTH0_DOMAIN
-ARG VITE_AUTH0_CLIENT_ID
+ARG VITE_API_DOMAIN
+ARG VITE_WEBSITE_DOMAIN
 
 COPY package*.json ./
 
@@ -15,8 +15,8 @@ COPY . .
 
 # Create the runtime config before build
 RUN echo "window.ENV = { \
-    VITE_AUTH0_DOMAIN: '${VITE_AUTH0_DOMAIN}', \
-    VITE_AUTH0_CLIENT_ID: '${VITE_AUTH0_CLIENT_ID}' \
+    VITE_API_DOMAIN: '${VITE_API_DOMAIN}', \
+    VITE_WEBSITE_DOMAIN: '${VITE_WEBSITE_DOMAIN}' \
 };" > public/env.js
 
 RUN npm run build
