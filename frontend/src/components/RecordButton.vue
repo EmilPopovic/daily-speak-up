@@ -1,21 +1,19 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from 'vue-router'
+import { ref, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
 
-// stanje
 const progress = ref(0);
 const isCounting = ref(false);
-const showCancel = ref(false);
 
 let intervalId = null;
-const DURATION = 10_000; // 10 sekundi
+const DURATION = 10_000;
 
+const router = useRouter();
 
 const startTimer = () => {
   if (isCounting.value) return;
 
   isCounting.value = true;
-  showCancel.value = true;
   progress.value = 0;
   const start = Date.now();
 
@@ -25,45 +23,47 @@ const startTimer = () => {
 
     if (elapsed >= DURATION) {
       clearInterval(intervalId);
+      intervalId = null;
       progress.value = 1;
       isCounting.value = false;
-      showCancel.value = false;
+
       generateTopic();
     }
   }, 1000 / 60);
 };
 
-// prekid timera i "sessiona"
 const cancelTimer = () => {
-  clearInterval(intervalId);
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
   isCounting.value = false;
-  showCancel.value = false;
   progress.value = 0;
- 
 };
+
+onBeforeUnmount(() => {
+  if (intervalId !== null) clearInterval(intervalId);
+});
 
 const generateTopic = async () => {
   try {
     const response = await fetch(BACKEND_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         interes: interes.value,
         lang: lang.value,
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Greška: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Greška: ${response.status}`);
 
     const data = await response.json();
-    console.log("Generirana tema:", data);
- 
-    const router = useRouter();
-    router.push({ name: 'topics', query: { tema: data.tema, lang: data.lang } });
+
+    router.push({
+      name: "topics",
+      query: { tema: data.tema, lang: data.lang },
+    });
 
   } catch (error) {
     console.error("Greška pri pozivu /topics/generate:", error);
@@ -72,25 +72,40 @@ const generateTopic = async () => {
 </script>
 
 <template>
-  <div
-    class="relative flex justify-center items-center mx-auto hover:cursor-pointer"
-    
-  >
+  <div class="relative flex justify-center items-center mx-auto">
 
-    <!-- pozadina gumba -->
+    <!-- Krug sa hover efektom koji ga samo potamni -->
     <div
-      class="w-[30vw] h-[30vw] 2xl:w-[20vw] 2xl:h-[20vw] rounded-full 
-             bg-gradient-to-b from-sky-200 to-sky-400 shadow-lg 
-             hover:cursor-pointer hover:scale-105 transition duration-300"
+      class="w-[22vw] h-[22vw] 2xl:w-[16vw] 2xl:h-[16vw] rounded-full
+             bg-[radial-gradient(circle,_#c4eafe,_#38bdf8)]
+             shadow-lg flex items-center justify-center
+             hover:cursor-pointer transition-all duration-200
+             hover:brightness-90"
+      @click="isCounting ? cancelTimer() : startTimer()"
     >
-      <span class="pi pi-microphone" style="color: white; font-size: 12vw; position: center;" ></span>
+      <!-- Mikrofon -->
+      <span
+        v-if="!isCounting"
+        class="pi pi-microphone text-white"
+        style="font-size: 9vw;"
+      ></span>
+
+      <!-- X za prekid -->
+      <span
+        v-else
+        class="text-white"
+        style="font-size: 9vw;"
+        @click.stop="cancelTimer"
+      >
+        ✖
+      </span>
     </div>
 
-    <!-- plava kružnica (progress ring) -->
+    <!-- Progress ring -->
     <svg
-      class="absolute w-full h-full -rotate-90"
+      v-if="isCounting"
+      class="absolute w-full h-full -rotate-90 pointer-events-none"
       viewBox="0 0 100 100"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <circle
         cx="50"
@@ -104,22 +119,8 @@ const generateTopic = async () => {
         class="transition-all duration-100"
       />
     </svg>
-
-    
-
-    <button
-      v-if="showCancel"
-      @click.stop="cancelTimer"
-      class="absolute bottom-[-15%] w-16 h-16 rounded-full bg-red-600 shadow-lg
-             hover:bg-red-700 transition text-white text-3xl flex items-center justify-center"
-    >
-      ✖
-    </button>
   </div>
 </template>
 
 <style scoped>
-div {
-  border: solid 1px black;
-}
 </style>
