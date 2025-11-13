@@ -84,6 +84,43 @@ class Settings(BaseSettings):
     def CELERY_RATE_LIMIT(self) -> str:
         return getenv('CELERY_RATE_LIMIT', '2/s')
     
+    # SuperTokens configuration
+    @property
+    def supertokens_connection_uri(self) -> str:
+        """SuperTokens Core connection URI"""
+        return getenv('SUPERTOKENS_CONNECTION_URI', 'http://localhost:3567')
+    
+    @property
+    def supertokens_api_key(self) -> str:
+        """SuperTokens API key for managed service (optional)"""
+        return getenv('SUPERTOKENS_API_KEY', '')
+    
+    @property
+    def app_name(self) -> str:
+        return getenv('APP_NAME', 'DailySpeakUp')
+    
+    @property
+    def api_domain(self) -> str:
+        return getenv('API_DOMAIN', 'http://localhost:8123')
+    
+    @property
+    def website_domain(self) -> str:
+        return getenv('WEBSITE_DOMAIN', 'http://localhost:5173')
+    
+    @property
+    def api_base_path(self) -> str:
+        return getenv('API_BASE_PATH', '/auth')
+    
+    @property
+    def google_client_id(self) -> str:
+        """Google OAuth client ID"""
+        return getenv('GOOGLE_CLIENT_ID', '')
+    
+    @property
+    def google_client_secret(self) -> str:
+        """Google OAuth client secret"""
+        return getenv('GOOGLE_CLIENT_SECRET', '')
+    
     # endregion
     
     class Config:

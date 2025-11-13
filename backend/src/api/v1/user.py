@@ -1,24 +1,30 @@
 import logging
-from fastapi import APIRouter, Security, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from ..deps import get_auth_service
+from ..deps import get_session
 from ...db import get_db
-from ...schemas import JWTPayload, UserResponse, UserCreate
+from ...schemas import UserResponse, UserCreate
 from ...models import User
+from supertokens_python.recipe.session import SessionContainer
+
+from ...services import EmailService
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=['user'], prefix='/user')
 
 @router.put('/register', response_class=JSONResponse)
-def register(
+async def register(
     user_data: UserCreate,
     db: Session = Depends(get_db),
-    _: JWTPayload = Security(get_auth_service().verify)
+    session: SessionContainer = Depends(get_session)
 ):
+    # Get user_id from SuperTokens session
+    supertokens_user_id = session.get_user_id()
+    
     existing_user: User | None = db.query(User).filter(
-        User.auth0_user_id == user_data.auth0_id
+        User.supertokens_user_id == supertokens_user_id
     ).first()
 
     if existing_user:
@@ -28,13 +34,18 @@ def register(
         )
 
     user = User(
-        auth0_user_id=user_data.auth0_id,
+        supertokens_user_id=supertokens_user_id,
         email=user_data.email,
-        handle=user_data.auth0_id,
+        handle=supertokens_user_id,  # Default handle
     )
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    EmailService.send_email(    
+        to_mail=user_data.email,
+        subject="Welcome to DailySpeakUp!"
+    )
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -44,14 +55,14 @@ def register(
     )
 
 @router.get('/me', response_model=UserResponse, status_code=status.HTTP_200_OK)
-def me(
+async def me(
     db: Session = Depends(get_db),
-    auth_result: JWTPayload = Security(get_auth_service().verify),
+    session: SessionContainer = Depends(get_session)
 ):
-    auth0_user_id = auth_result['sub']
+    supertokens_user_id = session.get_user_id()
 
     user: User | None = db.query(User).filter(
-        User.auth0_user_id == auth0_user_id
+        User.supertokens_user_id == supertokens_user_id
     ).first()
 
     if user is None:

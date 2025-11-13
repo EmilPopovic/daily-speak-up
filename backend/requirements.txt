@@ -4,8 +4,9 @@ python-dotenv
 pydantic-settings
 sqlalchemy[mypy]
 psycopg2-binary
-python-jose[cryptography]
-httpx
 google-genai
 celery
 resend
+supertokens-python
+pydantic[email]
+email-validator

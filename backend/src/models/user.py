@@ -30,8 +30,8 @@ class User(Base):
     __tablename__ = 'users'
     __table_args__ = (
         Index(
-            'idx_users_auth0_user_id',
-            'auth0_user_id',
+            'idx_users_supertokens_user_id',
+            'supertokens_user_id',
             unique=True,
         ),
         Index(
@@ -63,9 +63,10 @@ class User(Base):
         nullable=False,
     )
 
-    auth0_user_id: Mapped[str] = mapped_column(
+    supertokens_user_id: Mapped[str] = mapped_column(
         Text,
         nullable=False,
+        unique=True,
     )
 
     email: Mapped[str] = mapped_column(

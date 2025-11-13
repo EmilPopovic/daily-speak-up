@@ -8,7 +8,7 @@ U današnjem poslovnom i akademskom okruženju, sposobnost jasnog i uvjerljivog 
 
 DailySpeakUp pruža pristupačno, gamificirano rješenje koje omogućava svakodnevno vježbanje kroz kratke jednominutne govorne izazove, s mogućnošću praćenja napretka i dobivanja povratnih informacija od zajednice.
 
-## Članovi tima 
+## Članovi tima
 
 * [Emil Popović](https://github.com/EmilPopovic) - voditelj, arhitektura, backend
 * [Matej Jurasić](https://github.com/cappig) - backend, testiranje
@@ -30,7 +30,7 @@ DailySpeakUp pruža pristupačno, gamificirano rješenje koje omogućava svakodn
 ### Vanjske usluge
 
 * AI servis za generiranje tema: [Google Gemini](https://gemini.google/about/)
-* Autentikacija: [Auth0](https://auth0.com/)
+* Autentikacija: [SuperTokens](https://supertokens.com/)
 * Push notifikacije: [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging)
 * Video pohrana: [Cloudflare R2](https://www.cloudflare.com/products/r2/)
 * Email usluge: [Resend](https://resend.com/)

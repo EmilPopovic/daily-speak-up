@@ -4,6 +4,7 @@ from ..services import (
     GeminiService,
     S3Service,
 )
+from ..services.auth_service import get_session
 from ..services.email_impl.sender import ResendEmailSender
 from .config import get_settings
 
