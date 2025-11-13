@@ -57,8 +57,8 @@ async function save() {
 <template>
   <div class="space-y-6">
     <div class="mb-6">
-      <h2 class="text-2xl font-bold mb-2" style="color: #1e40af;">Odaberite svoje interese</h2>
-      <p style="color: #4b5563;">Izaberite teme koje vas zanimaju (odaberite najmanje 1)</p>
+      <h2 class="text-2xl font-bold mb-2 text-primary">Odaberite svoje interese</h2>
+      <p class="text-secondary">Izaberite teme koje vas zanimaju (odaberite najmanje 1)</p>
     </div>
 
     <!-- Loading State -->
@@ -70,7 +70,7 @@ async function save() {
     <div v-else class="space-y-4">
       <!-- Selected Count -->
       <div v-if="selectedCount > 0" class="flex items-center gap-2">
-        <Chip :label="`${selectedCount} odabrano`" style="background-color: #eff6ff; color: #1e40af;" />
+        <Chip :label="`${selectedCount} odabrano`" class="bg-accent text-primary" />
       </div>
 
       <!-- Interest Buttons -->
@@ -82,9 +82,8 @@ async function save() {
           type="button"
           class="relative group border-2 rounded-lg px-4 py-3 text-left font-medium transition-all duration-200 hover:shadow-md"
           :class="isSelected(i.slug) 
-            ? 'text-white shadow-md' 
-            : 'border-gray-300 bg-white hover:border-blue-400'"
-          :style="isSelected(i.slug) ? 'border-color: #3b82f6; background-color: #3b82f6; color: #ffffff;' : 'color: #1f2937;'"
+            ? 'border-primary bg-primary text-white shadow-md' 
+            : 'border-light bg-card text-dark hover:border-primary'"
         >
           <div class="flex items-center justify-between">
             <span>{{ i.label }}</span>
@@ -98,14 +97,14 @@ async function save() {
 
       <!-- Empty State -->
       <div v-if="catalog.length === 0" class="text-center py-8">
-        <i class="pi pi-info-circle text-4xl text-gray-400 mb-3"></i>
-        <p class="text-gray-600">Nema dostupnih interesa za prikaz</p>
+        <i class="pi pi-info-circle text-4xl text-muted mb-3"></i>
+        <p class="text-secondary">Nema dostupnih interesa za prikaz</p>
       </div>
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex justify-between items-center pt-6 border-t">
-      <p class="text-sm text-gray-500">
+    <div class="flex justify-between items-center pt-6 border-t border-light">
+      <p class="text-sm text-light">
         {{ selectedCount === 0 ? 'Odaberite najmanje jedan interes' : `Odabrano: ${selectedCount}` }}
       </p>
       <Button 

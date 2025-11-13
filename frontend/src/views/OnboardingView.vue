@@ -23,12 +23,12 @@ function onPhase2Done() { router.replace('/'); }
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4" style="background-color: #f0f4f8;">
+  <div class="min-h-screen flex items-center justify-center p-4 bg-main">
     <div v-if="!loading" class="w-full max-w-2xl">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold mb-2" style="color: #1e3a8a;">Dobrodošli</h1>
-        <p class="text-gray-600">Dovršite svoj profil u nekoliko koraka</p>
+        <h1 class="text-4xl font-bold mb-2" style="color: var(--color-primary-dark);">Dobrodošli</h1>
+        <p class="text-secondary">Dovršite svoj profil u nekoliko koraka</p>
       </div>
 
       <!-- Progress Steps -->
@@ -36,25 +36,23 @@ function onPhase2Done() { router.replace('/'); }
         <div class="flex items-center">
           <div 
             class="flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all duration-300"
-            :class="phase! >= 1 ? 'text-white shadow-lg' : 'bg-gray-200 text-gray-500'"
-            :style="phase! >= 1 ? 'background-color: #3b82f6;' : ''"
+            :class="phase! >= 1 ? 'bg-primary text-white shadow-lg' : 'bg-gray-200 text-gray-500'"
           >
             1
           </div>
-          <span class="ml-2 font-medium" :class="phase! >= 1 ? '' : 'text-gray-500'" :style="phase! >= 1 ? 'color: #3b82f6;' : ''">Profil</span>
+          <span class="ml-2 font-medium" :class="phase! >= 1 ? 'text-primary' : 'text-gray-500'">Profil</span>
         </div>
         
-        <div class="w-16 h-1 rounded" :class="phase! >= 2 ? '' : 'bg-gray-300'" :style="phase! >= 2 ? 'background-color: #3b82f6;' : ''"></div>
+        <div class="w-16 h-1 rounded" :class="phase! >= 2 ? 'bg-primary' : 'bg-gray-300'"></div>
         
         <div class="flex items-center">
           <div 
             class="flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all duration-300"
-            :class="phase! >= 2 ? 'text-white shadow-lg' : 'bg-gray-200 text-gray-500'"
-            :style="phase! >= 2 ? 'background-color: #3b82f6;' : ''"
+            :class="phase! >= 2 ? 'bg-primary text-white shadow-lg' : 'bg-gray-200 text-gray-500'"
           >
             2
           </div>
-          <span class="ml-2 font-medium" :class="phase! >= 2 ? '' : 'text-gray-500'" :style="phase! >= 2 ? 'color: #3b82f6;' : ''">Interesi</span>
+          <span class="ml-2 font-medium" :class="phase! >= 2 ? 'text-primary' : 'text-gray-500'">Interesi</span>
         </div>
       </div>
 
@@ -70,7 +68,7 @@ function onPhase2Done() { router.replace('/'); }
     <!-- Loading State -->
     <div v-else class="flex flex-col items-center justify-center gap-4">
       <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="4" />
-      <p class="text-gray-600 text-lg">Učitavanje...</p>
+      <p class="text-secondary text-lg">Učitavanje...</p>
     </div>
   </div>
 </template>

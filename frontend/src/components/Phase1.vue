@@ -47,14 +47,14 @@ async function submit() {
 <template>
   <form class="space-y-6" @submit.prevent="submit">
     <div class="mb-6">
-      <h2 class="text-2xl font-bold mb-2" style="color: #1e40af;">Postavite svoj profil</h2>
-      <p style="color: #4b5563;">Recite nam nešto o sebi</p>
+      <h2 class="text-2xl font-bold mb-2 text-primary">Postavite svoj profil</h2>
+      <p class="text-secondary">Recite nam nešto o sebi</p>
     </div>
 
     <!-- Name Field -->
     <div class="space-y-2">
-      <label for="name" class="block text-sm font-semibold" style="color: #1f2937;">
-        Ime <span style="color: #ef4444;">*</span>
+      <label for="name" class="block text-sm font-semibold text-dark">
+        Ime <span style="color: var(--color-error);">*</span>
       </label>
       <InputText 
         id="name"
@@ -64,13 +64,13 @@ async function submit() {
         required
         :disabled="submitting"
       />
-      <small class="text-gray-500">Vaše puno ime ili ime koje želite koristiti</small>
+      <small class="text-light">Vaše puno ime ili ime koje želite koristiti</small>
     </div>
 
     <!-- Handle Field -->
     <div class="space-y-2">
-      <label for="handle" class="block text-sm font-semibold" style="color: #1f2937;">
-        Korisničko ime (handle) <span style="color: #ef4444;">*</span>
+      <label for="handle" class="block text-sm font-semibold text-dark">
+        Korisničko ime (handle) <span style="color: var(--color-error);">*</span>
       </label>
       <div class="relative">
         <InputText 
@@ -99,7 +99,7 @@ async function submit() {
         </InlineMessage>
       </div>
       
-      <small class="text-gray-500">
+      <small class="text-light">
         3-20 znakova, dozvoljena slova, brojevi i donja crta
       </small>
     </div>

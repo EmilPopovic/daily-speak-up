@@ -1,6 +1,43 @@
 @import "tailwindcss";
 
 :root {
+  /* DailySpeakUp Brand Colors - Based on Email Templates */
+  
+  /* Primary Colors */
+  --color-primary: #3b82f6;           /* Main brand blue */
+  --color-primary-dark: #1e3a8a;      /* Dark brand blue for headers */
+  --color-primary-darker: #1e40af;    /* Even darker for important text */
+  --color-primary-light: #eff6ff;     /* Very light blue for backgrounds */
+  --color-primary-medium: #2563eb;    /* Medium blue for hover states */
+  
+  /* Background Colors */
+  --color-bg-main: #f0f4f8;           /* Main background (from email) */
+  --color-bg-card: #ffffff;           /* Card/content background */
+  --color-bg-accent: #eff6ff;         /* Accent background */
+  
+  /* Text Colors */
+  --color-text-primary: #1e40af;      /* Primary text (blue) */
+  --color-text-secondary: #4b5563;    /* Secondary text (gray) */
+  --color-text-dark: #1f2937;         /* Dark text */
+  --color-text-light: #6b7280;        /* Light text */
+  --color-text-white: #ffffff;        /* White text */
+  --color-text-muted: #9ca3af;        /* Muted text */
+  
+  /* Border Colors */
+  --color-border-light: #e5e7eb;      /* Light borders */
+  --color-border-medium: #d1d5db;     /* Medium borders */
+  --color-border-primary: #3b82f6;    /* Primary borders */
+  
+  /* Status Colors */
+  --color-success: #10b981;           /* Success green */
+  --color-error: #ef4444;             /* Error red */
+  --color-warning: #f59e0b;           /* Warning orange */
+  --color-info: #3b82f6;              /* Info blue */
+  
+  /* Gradient */
+  --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  
+  /* Font Settings */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -13,11 +50,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--color-primary);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--color-primary-medium);
 }
 
 body {
@@ -25,6 +62,8 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--color-bg-main);
+  color: var(--color-text-dark);
 }
 
 h1 {
@@ -39,16 +78,18 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: var(--color-primary-medium);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .card {
@@ -60,15 +101,21 @@ button:focus-visible {
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+/* Utility classes for consistent styling */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-dark { color: var(--color-text-dark); }
+.text-light { color: var(--color-text-light); }
+.text-muted { color: var(--color-text-muted); }
+
+.bg-main { background-color: var(--color-bg-main); }
+.bg-card { background-color: var(--color-bg-card); }
+.bg-accent { background-color: var(--color-bg-accent); }
+.bg-primary { background-color: var(--color-primary); }
+.bg-primary-dark { background-color: var(--color-primary-dark); }
+
+.border-primary { border-color: var(--color-primary); }
+.border-light { border-color: var(--color-border-light); }
+.border-medium { border-color: var(--color-border-medium); }
+
+.gradient-primary { background: var(--gradient-primary); }
