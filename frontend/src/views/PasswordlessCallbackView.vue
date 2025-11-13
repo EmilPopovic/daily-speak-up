@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Passwordless from 'supertokens-web-js/recipe/passwordless';
+import Passwordless from 'supertokens-web-js/recipe/passwordless';;
 
 const router = useRouter();
 const loading = ref(true);

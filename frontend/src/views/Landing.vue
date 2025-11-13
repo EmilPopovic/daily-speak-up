@@ -43,15 +43,13 @@ const teamSet = ref([
             DailySpeakUp
           </h1>
           <p class="mt-8 text-base sm:text-lg text-slate-700 leading-relaxed">
-            Aplikacija za kratke, svakodnevne vježbe javnog govora s povratnom informacijom.
+            U današnjem akademskom i poslovnom okruženju, mnogi se i dalje suočavaju s izazovima javnog nastupa i jasne, samouvjerene komunikacije – ključne vještine za osobni i profesionalni uspjeh.
           </p>
           <p class="mt-3 text-base text-slate-700 leading-relaxed">
-            Vježba traje 1–2 minute. Snimiš govor, a mi ti vratimo nekoliko jasnih napomena:
-            što ti ide dobro i što možeš probati idući put. Nije natjecanje, nego mali dnevni korak.
+            DailySpeakUp nudi jednostavno i pristupačno rješenje — svakodnevne govorne izazove od jedne minute koji ti pomažu da s vremenom postaneš sigurniji i tečniji govornik.
           </p>
           <p class="mt-3 text-sm text-slate-600 leading-relaxed">
-            Dobro došli su svi — učenici, studenti, predavači, timovi… i svi koji jednostavno žele
-            zvučati sigurnije.
+            Bez potrebe za skupim tečajevima ili mentorima, možeš svakodnevno vježbati, pratiti vlastiti napredak i dobivati povratne informacije od zajednice koja uči i napreduje zajedno s tobom.
           </p>
         </div>
       </div>
@@ -66,17 +64,17 @@ const teamSet = ref([
         <div class="rounded-xl border bg-white p-6 text-center">
           <div class="text-4xl">🎯</div>
           <h3 class="mt-3 font-semibold text-lg">Odabir teme</h3>
-          <p class="mt-2 text-slate-700 leading-relaxed">Uzmi našu dnevnu temu ili upiši svoju.</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">Označi svoje interese i odaberi temu od ponuđenih opcija.</p>
         </div>
         <div class="rounded-xl border bg-white p-6 text-center">
           <div class="text-4xl">🎤</div>
           <h3 class="mt-3 font-semibold text-lg">Kratko snimanje</h3>
-          <p class="mt-2 text-slate-700 leading-relaxed">1–2 minute govora na webu ili mobitelu.</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">1 minuta govora na webu ili mobitelu.</p>
         </div>
         <div class="rounded-xl border bg-white p-6 text-center">
           <div class="text-4xl">💬</div>
           <h3 class="mt-3 font-semibold text-lg">Povratna informacija</h3>
-          <p class="mt-2 text-slate-700 leading-relaxed">Sažeti savjeti za sljedeći pokušaj.</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">Dobivaš detaljne komentare od zajednice.</p>
         </div>
       </div>
     </section>
@@ -88,7 +86,7 @@ const teamSet = ref([
         <div class="rounded-xl border bg-white p-6">
           <div class="text-2xl">🗣️</div>
           <h3 class="mt-3 font-semibold">Redovitu praksu</h3>
-          <p class="mt-2 text-slate-700 leading-relaxed">Kratke vježbe koje stanu u dan.</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">Svakodnevne vježbe koje stanu u jedan dan.</p>
         </div>
         <div class="rounded-xl border bg-white p-6">
           <div class="text-2xl">⏰</div>
@@ -98,12 +96,12 @@ const teamSet = ref([
         <div class="rounded-xl border bg-white p-6">
           <div class="text-2xl">🤖</div>
           <h3 class="mt-3 font-semibold">Jasan feedback</h3>
-          <p class="mt-2 text-slate-700 leading-relaxed">Bez praznih fraza — konkretne smjernice.</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">Jasan i konkretan feedback za tvoj napredak.</p>
         </div>
         <div class="rounded-xl border bg-white p-6">
           <div class="text-2xl">🔒</div>
           <h3 class="mt-3 font-semibold">Privatnost</h3>
-          <p class="mt-2 text-slate-700 leading-relaxed">Snimke i podaci ostaju tvoji.</p>
+          <p class="mt-2 text-slate-700 leading-relaxed">Tvoje snimke i podaci su zaštićeni i neće biti dijeljeni bez tvog pristanka.</p>
         </div>
       </div>
     </section>

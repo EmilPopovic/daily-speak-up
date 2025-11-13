@@ -1,8 +1,13 @@
 <template>
   <div>
-    <Button label="Log in" icon="pi pi-sign-in" @click="visible = true" />
+    <Button
+      label="Log in"
+      icon="pi pi-sign-in"
+      class="!bg-sky-500 hover:!bg-sky-600 !text-white !border-none !shadow-md"
+      @click="visible = true"
+    />
     
-    <Dialog v-model:visible="visible" modal header="Log in" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="visible" modal header="Log in" :style="{ width: '25rem' }" severity="primary">
       <form @submit.prevent="handleLogin" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
           <label for="email" class="font-semibold">Email</label>
@@ -32,7 +37,7 @@
         
         <div class="flex justify-end gap-2 mt-4">
           <Button type="button" label="Cancel" severity="secondary" @click="visible = false" :disabled="loading" />
-          <Button type="submit" label="Log in" icon="pi pi-sign-in" :loading="loading" />
+          <Button type="submit" label="Log in" icon="pi pi-sign-in" :loading="loading" severity="primary" />
         </div>
       </form>
     </Dialog>
