@@ -13,13 +13,13 @@ const loading = ref(true);
 
 onMounted(async () => {
   const st = await api('/onboarding/state', { method: 'GET' });
-  if (st.completed) return router.replace('/');
+  if (st.completed) return router.replace('/home');
   phase.value = st.phase;
   loading.value = false;
 });
 
 function onPhase1Done() { phase.value = 2; }
-function onPhase2Done() { router.replace('/'); }
+function onPhase2Done() { router.replace('/home'); }
 </script>
 
 <template>

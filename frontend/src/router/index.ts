@@ -47,46 +47,67 @@ const router = createRouter({
   ]
 });
 
-// Navigation guard to handle authentication routing
+async function isOnboardingComplete(): Promise<boolean | null> {
+  try {
+    const apiDomain = import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123';
+    const response = await fetch(`${apiDomain}/api/v1/user/me`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const userData = await response.json();
+      return userData.onboarding_status === 'completed';
+    }
+    return null;
+  } catch (error) {
+    console.error('Error checking onboarding status:', error);
+    return null;
+  }
+}
+
 router.beforeEach(async (to, _from, next) => {
   const authenticated = await isAuthenticated();
 
-  // If user is authenticated and trying to access landing page
-  if (authenticated && to.meta.requiresGuest) {
-    try {
-      // Check user's onboarding status
-      const apiDomain = import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123';
-      const response = await fetch(`${apiDomain}/api/v1/user/me`, {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
+  if (to.meta.requiresAuth && !authenticated) {
+    return next('/');
+  }
 
-      if (response.ok) {
-        const userData = await response.json();
-        
-        // If onboarding is not complete, redirect to onboarding
-        if (userData.onboarding_status === 'PENDING' || userData.onboarding_status === 'IN_PROGRESS') {
-          return next('/onboarding');
-        } else {
-          // Onboarding complete, redirect to home
-          return next('/home');
-        }
-      } else {
-        // If we can't fetch user data, default to onboarding
+  if (authenticated && to.meta.requiresAuth) {
+    const onboardingCompleted = await isOnboardingComplete();
+    const isOnboardingRoute = to.path === '/onboarding';
+
+    // If we couldn't fetch the onboarding status, redirect to onboarding to be safe
+    if (onboardingCompleted === null) {
+      if (!isOnboardingRoute) {
         return next('/onboarding');
       }
-    } catch (error) {
-      console.error('Error checking user status:', error);
-      // On error, default to onboarding
-      return next('/onboarding');
+    } else {
+      // If onboarding is not complete and user is trying to access any protected route except onboarding
+      if (!onboardingCompleted && !isOnboardingRoute) {
+        return next('/onboarding');
+      }
+
+      // If onboarding is complete and user is trying to access onboarding page
+      if (onboardingCompleted && isOnboardingRoute) {
+        return next('/home');
+      }
     }
   }
 
-  // If route requires auth and user is not authenticated
-  if (to.meta.requiresAuth && !authenticated) {
-    return next('/');
+  // If user is authenticated and trying to access landing page
+  if (authenticated && to.meta.requiresGuest) {
+    const onboardingCompleted = await isOnboardingComplete();
+    
+    // Redirect based on onboarding status
+    if (onboardingCompleted === false) {
+      return next('/onboarding');
+    } else {
+      // If completed or unknown, redirect to home (home will handle further checks)
+      return next('/home');
+    }
   }
 
   // Otherwise, proceed as normal
