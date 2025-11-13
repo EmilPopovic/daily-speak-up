@@ -1,0 +1,141 @@
+---
+config:
+  layout: elk
+---
+classDiagram
+    class User {
+        +UUID id
+        +str supertokens_user_id
+        +str email
+        +str handle
+        +UserRole role
+        +OnboardingStatus onboarding_status
+        +AppLang preferred_lang
+        +AppTheme preferred_theme
+    }
+    class Speech {
+        +UUID id
+        +UUID user_id
+        +str caption
+        +str s3_url
+        +SpeechVisibility visibility_level
+        +UUID interest_id
+    }
+    class Interest {
+        +UUID id
+        +str slug
+        +str name
+    }
+    class Rating {
+        +UUID id
+        +UUID speech_id
+        +UUID rated_by
+        +float score
+    }
+    class Report {
+        +UUID id
+        +UUID speech_id
+        +UUID reported_by
+        +ResolutionAction resolution_action
+    }
+    class Ban {
+        +UUID id
+        +UUID user_id
+        +UUID banned_by
+        +datetime ends_at
+    }
+    class Friendship {
+        +UUID id
+        +UUID user_id1
+        +UUID user_id2
+        +RequestStatus status
+    }
+    class UserDevice {
+        +UUID id
+        +UUID user_id
+        +str fcm_token
+    }
+    class UserStreak {
+        +UUID id
+        +UUID user_id
+        +date start_date
+        +date end_date
+    }
+    class UserInterest {
+        +UUID id
+        +UUID user_id
+        +UUID interest_id
+    }
+    class AppLang {
+        <<enumeration>>
+        EN
+        HR
+    }
+    class UserRole {
+        <<enumeration>>
+        USER
+        MOD
+        ADMIN
+    }
+    class OnboardingStatus {
+        <<enumeration>>
+        PENDING
+        COMPLETED
+    }
+    class RequestStatus {
+        <<enumeration>>
+        PENDING
+        ACCEPTED
+        DENIED
+    }
+    class SpeechVisibility {
+        <<enumeration>>
+        PRIVATE
+        FRIENDS
+    }
+    class ResolutionAction {
+        <<enumeration>>
+        PENDING
+        IGNORED
+        VIDEO_DELETED
+        USER_BANNED
+    }
+    class TopicRouter {
+        +generate_topic(request: TopicRequest, gemini_service: GeminiService) TopicResponse
+    }
+    class UserRouter {
+        +register(user_data: UserCreate, db: Session, jwt: JWTPayload) JSONResponse
+        +me(db: Session, auth_result: JWTPayload) UserResponse
+    }
+    class HealthRouter {
+        +health() JSONResponse
+        +detailed() JSONResponse
+    }
+    class GeminiService {
+        +generate_topic(interes, lang) str
+    }
+    class EmailService {
+        +send_email(to_mail, subject, message)
+    }
+    class SuperTokensService {
+        +verify(token) JWTPayload
+    }
+    User "1" -- "0..*" Speech : creates
+    User "1" -- "0..*" UserDevice : has
+    User "1" -- "0..*" UserStreak : tracks
+    User "1" -- "0..*" Rating : rates
+    User "1" -- "0..*" Report : reports
+    User "1" -- "0..*" Ban : receives/issues
+    User "2" -- "0..*" Friendship : participates
+    Speech "0..*" -- "1" Interest : categorized by
+    Speech "1" -- "0..*" Rating : rated by
+    Speech "1" -- "0..*" Report : reported by
+    UserInterest "0..*" -- "1" User :user
+    UserInterest "0..*" -- "1" Interest
+    Report "0..*" -- "0..*" Ban : may lead to
+    User ..> UserRole
+    User ..> OnboardingStatus
+    User ..> AppLang
+    Speech ..> SpeechVisibility
+    Report ..> ResolutionAction
+    Friendship ..> RequestStatus

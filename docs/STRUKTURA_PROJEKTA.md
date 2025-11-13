@@ -13,9 +13,6 @@ Ovaj dokument opisuje inicijalnu strukturu projekta. Ostala dokumentacija može 
 ├── docs
 │   ├── DEV_START.md
 │   └── STRUKTURA_PROJEKTA.md
-├── dokploy
-│   ├── compose.yaml
-│   └── .env.template
 ├── frontend
 │   ├── public
 │   │   └── vite.svg
@@ -46,6 +43,8 @@ Ovaj dokument opisuje inicijalnu strukturu projekta. Ostala dokumentacija može 
 ├── .vscode
 │   └── extensions.json
 ├── .gitignore
+├── .env.dokploy.template
+├── compose.yaml
 ├── makefile
 └── README.md
 ```
@@ -121,22 +120,6 @@ Direktorij sadrži dijeljene konfiguracije razvojnog orkuženja VSCode specifič
 
 Datoteka sadrži popis preporučenih VSCode proširenja za razvoj korištenih tehnologija.
 
-### `dokploy/`
-
-Budući da se u produkciji aplikacija pušta u pogon koristeći [Dokploy](https://dokploy.com/), u direktoriju `dokploy/` nalazi se sve što je potrebno da bi se aplikacija pustila u pogon:
-
-**`dokploy/compose.yaml`:**
-
-Ova datoteka opisuje sve usluge potrebne za ispravan rad aplikacijskog poslužitelja.
-
-Trenutno se u `compose.yaml` nalazi predložak koji ne radi ništa korisno i završava bez greške.
-
-**`dokploy/.env.template`:**
-
-U ovoj se datoteci nalaze sve tajne varijable koje koristi `compose.yaml`, tj. koje su potrebne za ispravan rad aplikacije.
-
-Datoteka je trenutno potpuno prazna.
-
 ### `.gitignore`
 
 Ovo je popis datoteka i direktorija koji se koriste za lokalni razvoj, ali nije potrebno ili poželjno slati ih na remote (GitHub). To mogu biti tajne datoteke (npr. `.env` datoteke sa stvarnim privatnim informacijama), cachevi (npr. `__pycache__/` koji se stvori kad se lokalno pokrene Python program), direktoriji s vanjskim ili uvezenim (importanim) modulima (npr. `.venv/`, `frontend/node_modules/`) ili rezultati build koraka (npr. `frontend/dist/`).
@@ -153,7 +136,15 @@ Također ignorira direktorij Pythonovog virtualnog orkuženja (`.venv/`) te cach
 
 Datoteku stvara automatski inicijalizacijski postupak Vue.js projekta te nije mijenjana.
 
-### `makefile`
+**`compose.yaml`:**
+
+Ova datoteka opisuje sve usluge potrebne za ispravan rad aplikacijskog poslužitelja.
+
+**`.env.dokploy.template`:**
+
+U ovoj se datoteci nalaze sve tajne varijable koje koristi `compose.yaml`, tj. koje su potrebne za ispravan rad aplikacije.
+
+### `Makefile`
 
 [Make](https://en.wikipedia.org/wiki/Make_(software)) se koristi za olakšavanje pokretanja naredbi - u ovom slučaju za istovremeno pokretanje frontenda i backenda tijekom lokalnog razvoja (izvan Dockera).
 
@@ -161,7 +152,13 @@ Dostupne `make` naredbe:
 
 - **`make setup`** - Osigurava da je sve potrebno instalirano, provjerava verzije i postavlja Python virtualno okruženje.
 - **`make install`** - Postavlja Python virtualno okruženje, instalira Python i Node dependencies
+- **`make pip`** - Instalira Python dependencies (radi `pip install`)
+- **`make npm`** - Instalira Node dependencies (radi `npm install`)
 - **`make backend`** - Pokreće backend FastAPI aplikaciju (koristeći Uvicorn server i objekt `app` iz modula `src.main`) na portu `8123`
 - **`make frontend`** - Pokreće Vite server frontenda na portu `5173`
 - **`make dev`** - Pokreće backend i frontend istovremeno
 - **`make test`** - Pokreće testove (trenutno ispisuje tekst u konzolu)
+- **`make create-db`** - Kreira sve tablice u bazi na `DATABASE_URL`
+- **`make drop-db`** - Briše sve tablica u bazi na `DATABASE_URL`, **ne traži potvrdu**
+- **`make reset-db`** - Briše sve tablice u bazi na `DATABASE_URL` i kreira nove, traži potvrdu
+- **`make reset-db-force`** - Briše sve tablice u bazi na `DATABASE_URL` i kreira nove, **ne traži potvrdu**

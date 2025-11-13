@@ -1,2 +1,12 @@
 fastapi
 uvicorn[standard]
+python-dotenv
+pydantic-settings
+sqlalchemy[mypy]
+psycopg2-binary
+google-genai
+celery
+resend
+supertokens-python
+pydantic[email]
+email-validator

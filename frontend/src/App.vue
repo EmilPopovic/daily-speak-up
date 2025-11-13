@@ -1,30 +1,29 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+  import { RouterView, RouterLink } from 'vue-router';
+  import { ref, onMounted, watch } from 'vue';
+  import { useRoute } from 'vue-router';
+  import LoginModal from './components/LoginModal.vue';
+  import Logout from './components/Logout.vue';
+  import User from './components/User.vue';
+  import { isAuthenticated } from './auth';
+
+  const route = useRoute();
+  const authenticated = ref(false);
+
+  const checkAuth = async () => {
+    authenticated.value = await isAuthenticated();
+  };
+
+  onMounted(async () => {
+    await checkAuth();
+  });
+
+  // Re-check authentication when route changes (e.g., after OAuth callback)
+  watch(() => route.path, async () => {
+    await checkAuth();
+  });
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <RouterView />
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
