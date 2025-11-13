@@ -91,31 +91,17 @@ def passwordless_login():
                         <td style="padding: 40px 30px; color: #1f2937 !important;">
                             <p style="font-size: 20px; color: #1e40af !important; margin: 0 0 20px 0; font-weight: 600;">Hello there!</p>
  
-                            <p style="font-size: 16px; line-height: 1.6; color: #4b5563 !important; margin: 0 0 20px 0;">
-                                You requested to sign in to your DailySpeakUp account. Use the code below to complete your sign in:
+                            <p style="font-size: 16px; line-height: 1.6; color: #4b5563 !important; margin: 0 0 30px 0;">
+                                You requested to sign in to your DailySpeakUp account. Click the button below to complete your sign in:
                             </p>
-
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #eff6ff !important; border: 2px dashed #3b82f6; margin: 30px 0; border-radius: 8px;">
-                                <tr>
-                                    <td style="padding: 30px; text-align: center;">
-                                        <p style="font-size: 14px; color: #6b7280 !important; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1px;">Your Login Code</p>
-                                        <p style="font-size: 42px; font-weight: 700; letter-spacing: 12px; color: #1e40af !important; margin: 0; font-family: 'Courier New', monospace;">
-                                            REPLACE_WITH_CODE
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
                                 <tr>
                                     <td align="center" style="padding: 20px 0;">
-                                        <p style="font-size: 16px; color: #6b7280 !important; margin: 0 0 20px 0;">
-                                            ───── OR ─────
-                                        </p>
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td style="background-color: #3b82f6 !important; background-image: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border-radius: 6px;">
-                                                    <a href="REPLACE_WITH_MAGIC_LINK" style="display: inline-block; color: #ffffff !important; text-decoration: none; padding: 14px 32px; font-weight: 600; font-size: 16px;">✨ Sign In with Magic Link</a>
+                                                    <a href="REPLACE_WITH_MAGIC_LINK" style="display: inline-block; color: #ffffff !important; text-decoration: none; padding: 14px 32px; font-weight: 600; font-size: 16px;">✨ Sign In to DailySpeakUp</a>
                                                 </td>
                                             </tr>
                                         </table>
