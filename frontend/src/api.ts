@@ -1,6 +1,6 @@
 import { getAccessToken } from './auth';
 
-const API = import.meta.env.VITE_API_BASE_URL;
+const API = import.meta.env.VITE_API_BASE_URL || (window as any).ENV?.VITE_API_BASE_URL || 'http://localhost:8123/api/v1';
 
 export async function api(path: string, init: RequestInit = {}) {
   const token = await getAccessToken();

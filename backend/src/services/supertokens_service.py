@@ -77,8 +77,8 @@ def init_supertokens():
                 ),
             ),
             session.init(
-                cookie_same_site="lax",
-                cookie_secure=settings.environment == "production",
+                cookie_same_site="none" if settings.environment == "production" else "lax",
+                cookie_secure=True if settings.environment == "production" else False,
             )
         ]
     )

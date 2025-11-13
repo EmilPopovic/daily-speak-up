@@ -6,6 +6,7 @@ WORKDIR /app
 # Add build arguments
 ARG VITE_API_DOMAIN
 ARG VITE_WEBSITE_DOMAIN
+ARG VITE_API_BASE_URL
 
 COPY package*.json ./
 
@@ -16,7 +17,8 @@ COPY . .
 # Create the runtime config before build
 RUN echo "window.ENV = { \
     VITE_API_DOMAIN: '${VITE_API_DOMAIN}', \
-    VITE_WEBSITE_DOMAIN: '${VITE_WEBSITE_DOMAIN}' \
+    VITE_WEBSITE_DOMAIN: '${VITE_WEBSITE_DOMAIN}', \
+    VITE_API_BASE_URL: '${VITE_API_BASE_URL}' \
 };" > public/env.js
 
 RUN npm run build
