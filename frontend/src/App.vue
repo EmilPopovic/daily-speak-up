@@ -5,6 +5,7 @@
   import LoginModal from './components/LoginModal.vue';
   import Logout from './components/Logout.vue';
   import User from './components/User.vue';
+  import EnvironmentIndicator from './components/EnvironmentIndicator.vue';
   import { isAuthenticated } from './auth';
 
   const route = useRoute();
@@ -25,5 +26,6 @@
 </script>
 
 <template>
+  <EnvironmentIndicator />
   <RouterView />
 </template>
