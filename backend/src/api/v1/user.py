@@ -9,6 +9,8 @@ from ...schemas import UserResponse, UserCreate
 from ...models import User
 from supertokens_python.recipe.session import SessionContainer
 
+from ...services import EmailService
+
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=['user'], prefix='/user')
 
@@ -39,6 +41,11 @@ async def register(
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    EmailService.send_email(    
+        to_mail=user_data.email,
+        subject="Welcome to DailySpeakUp!"
+    )
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
