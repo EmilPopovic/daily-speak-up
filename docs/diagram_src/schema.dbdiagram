@@ -10,11 +10,9 @@ Enum user_role {
   admin
 }
 
-Table app_languages {
-  ~id
-  ~created_at
-  slug text [not null, unique]
-  display_name text [not null, unique]
+Enum app_lang {
+  en
+  hr
 }
 
 Enum onboarding_status {
@@ -30,7 +28,7 @@ Table users {
 
   role user_role [not null]
   
-  auth0_user_id text [not null]
+  supertokens_user_id text [not null]
 
   email text [not null, unique]
   email_changed_at timestamp [default: null]
@@ -46,7 +44,7 @@ Table users {
 
   onboarding_status onboarding_status [default: 'pending']
 
-  preferred_lang uuid [not null, ref: > app_languages.id]
+  preferred_lang app_lang [not null, default: 'en']
   preferred_theme app_theme [default: 'system']
   preferred_tz_offset decimal(3,1) [default: 0]  // UTC+offset
 
