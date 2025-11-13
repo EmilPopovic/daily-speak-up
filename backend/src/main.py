@@ -3,8 +3,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, status, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-
-# SuperTokens imports
 from supertokens_python import get_all_cors_headers
 from supertokens_python.framework.fastapi import get_middleware
 
@@ -46,18 +44,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# Add SuperTokens middleware FIRST
 app.add_middleware(get_middleware())
 
-# Add CORS middleware AFTER SuperTokens middleware
-# Allow both configured domain and localhost for development
 allowed_origins = [settings.website_domain]
 if settings.environment == "dev":
-    # Add common development origins
     allowed_origins.extend([
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",
+        "https://dailyspeak.app",
+        "https://api.dailyspeak.app",
+        "https://test.dailyspeak.app",
+        "https://test.api.dailyspeak.app",
     ])
 
 app.add_middleware(
