@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from requests import session
+from supertokens_python.recipe.session import SessionContainer 
 
 from ...schemas import TopicRequest, TopicResponse
 from ...services.gemini_service import GeminiService
 from ..deps import get_gemini_service, get_session
-from supertokens_python.recipe.session import SessionContainer 
 
 router = APIRouter(prefix='/topics', tags=['Topics'])
 

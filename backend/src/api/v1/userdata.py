@@ -1,15 +1,13 @@
 from fastapi import APIRouter, FastAPI, HTTPException, Depends, status
-from ..deps import get_session
-from ...models import User, Interest, UserInterest
+from ..deps import get_session, get_gemini_service
+from ...models import User, Interest, UserInterest, AppLang
 from ...schemas import UsernameData, EmailData, InterestData
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from ...db import get_db
 from fastapi.responses import JSONResponse
 from supertokens_python.recipe.session import SessionContainer 
-from ..config import get_settings
+from ...services.gemini_service import GeminiService
 import random
-import httpx
 
 router = APIRouter(prefix="/userdata", tags=["UserData"])
 
@@ -173,7 +171,8 @@ async def set_interests(
 @router.get("/topic", response_class=JSONResponse)
 async def get_speaking_topic(
    db: Session = Depends(get_db),
-   session: SessionContainer = Depends(get_session)
+   session: SessionContainer = Depends(get_session),
+   gemini_service: GeminiService = Depends(get_gemini_service)
 ):
    supertokens_user_id = session.get_user_id()
 
@@ -209,27 +208,18 @@ async def get_speaking_topic(
 
    interest = random.choice(interests_list)
 
-   print(f"{get_settings().api_domain}/api/v1/topics/generate")
-
-   async with httpx.AsyncClient(timeout=10.0) as client:
-      try:
-         response = await client.post(
-            f"{get_settings().api_domain}/api/v1/topics/generate",
-            json={"interes": interest, "lang": "hr"},
-            headers={"Authorization": f"Bearer {session.get_access_token()}"}
-         )
-         response.raise_for_status()
-      except httpx.HTTPError as e:
-         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-            detail=f"Error generating interest & topic: {str(e)}"
-         )
+   try:
+      topic = await gemini_service.generate_topic(interest, user.preferred_lang)
+   except Exception as e:
+      raise HTTPException(
+         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+         detail=f"Error generating interest & topic: {str(e)}"
+      )
    
-   topic_data = response.json()
    return JSONResponse(
       status_code=status.HTTP_200_OK,
       content={
          "interest": interest,
-         "topic": topic_data.get("tema")
+         "topic": topic
       }
    )
