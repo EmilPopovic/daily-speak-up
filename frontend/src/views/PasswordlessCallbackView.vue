@@ -44,7 +44,7 @@ onMounted(async () => {
     if (response.status === 'OK') {
       if (response.createdNewRecipeUser) {
         try {
-          const apiDomain = import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123';
+          const apiDomain = import.meta.env.VITE_API_DOMAIN || (window as any).ENV?.VITE_API_DOMAIN || 'http://localhost:8123';
           const registerResponse = await fetch(`${apiDomain}/api/v1/user/register`, {
             method: 'PUT',
             credentials: 'include',

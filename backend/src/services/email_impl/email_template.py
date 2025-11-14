@@ -101,7 +101,7 @@ def passwordless_login():
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td style="background-color: #3b82f6 !important; background-image: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border-radius: 6px;">
-                                                    <a href="REPLACE_WITH_MAGIC_LINK" style="display: inline-block; color: #ffffff !important; text-decoration: none; padding: 14px 32px; font-weight: 600; font-size: 16px;">✨ Sign In to DailySpeakUp</a>
+                                                    <a href="REPLACE_WITH_MAGIC_LINK" style="display: inline-block; color: #ffffff !important; text-decoration: none; padding: 14px 32px; font-weight: 600; font-size: 16px;">Sign In to DailySpeakUp</a>
                                                 </td>
                                             </tr>
                                         </table>

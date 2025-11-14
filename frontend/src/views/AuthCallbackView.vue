@@ -35,7 +35,7 @@ export default {
           // Only register in our database if this is a newly created user
           if (createdNewUser) {
             try {
-              const apiDomain = import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123';
+              const apiDomain = import.meta.env.VITE_API_DOMAIN || window.ENV?.VITE_API_DOMAIN || 'http://localhost:8123';
               const registerResponse = await fetch(`${apiDomain}/api/v1/user/register`, {
                 method: 'PUT',
                 credentials: 'include', // Include session cookies

@@ -1,21 +1,32 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from 'vue-router'
+import { ref, onBeforeUnmount } from "vue";
 
-// stanje
+const props = defineProps({
+  interes: {
+    type: String,
+    default: "",
+  },
+  lang: {
+    type: String,
+    default: "hr",
+  },
+});
+
+const emit = defineEmits(["topic-generated"]);
+
 const progress = ref(0);
 const isCounting = ref(false);
-const showCancel = ref(false);
 
 let intervalId = null;
-const DURATION = 10_000; // 10 sekundi
+const DURATION = 10_000;
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || window.ENV?.VITE_API_BASE_URL || 'http://localhost:8123/api/v1'
 
 const startTimer = () => {
   if (isCounting.value) return;
 
+  console.log("[RecordButton] startTimer");
   isCounting.value = true;
-  showCancel.value = true;
   progress.value = 0;
   const start = Date.now();
 
@@ -24,73 +35,96 @@ const startTimer = () => {
     progress.value = Math.min(1, elapsed / DURATION);
 
     if (elapsed >= DURATION) {
+      console.log("[RecordButton] timer finished, calling generateTopic");
       clearInterval(intervalId);
+      intervalId = null;
       progress.value = 1;
       isCounting.value = false;
-      showCancel.value = false;
+
       generateTopic();
     }
   }, 1000 / 60);
 };
 
-// prekid timera i "sessiona"
 const cancelTimer = () => {
-  clearInterval(intervalId);
+  console.log("[RecordButton] cancelTimer");
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
   isCounting.value = false;
-  showCancel.value = false;
   progress.value = 0;
- 
 };
 
+onBeforeUnmount(() => {
+  if (intervalId !== null) clearInterval(intervalId);
+});
+
 const generateTopic = async () => {
+  console.log("[RecordButton] generateTopic START", {
+    interes: props.interes,
+    lang: props.lang,
+  });
+
   try {
-    const response = await fetch(BACKEND_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        interes: interes.value,
-        lang: lang.value,
-      }),
-    });
+    const response = await fetch(`${API_BASE_URL}/userdata/topic`);
+
+    console.log("[RecordButton] response status:", response);
 
     if (!response.ok) {
-      throw new Error(`Greška: ${response.status}`);
+      // i u slučaju greške emitiramo nešto
+      const msg = "🫣 Oops! Trenutni AI servis je preopterećen. Pokušaj ponovno za 1 minutu.";
+      console.error("[RecordButton]", msg);
+      emit("topic-generated", msg, props.lang);
+      return;
     }
 
     const data = await response.json();
-    console.log("Generirana tema:", data);
- 
-    const router = useRouter();
-    router.push({ name: 'topics', query: { tema: data.tema, lang: data.lang } });
+    console.log("[RecordButton] data from backend:", data);
 
+    emit("topic-generated", data.interest ?? "Nije odabran interes", data.topic ?? "Nema teme u odgovoru", data.lang ?? props.lang);
   } catch (error) {
-    console.error("Greška pri pozivu /topics/generate:", error);
+    console.error("[RecordButton] fetch error:", error);
+    // čak i ako fetch pukne, prikaži poruku u Fieldsetu
+    emit("topic-generated", props.interes, "🫣 Oops! Trenutni AI servis je preopterećen. Pokušaj ponovno za 1 minutu.", props.lang);
   }
 };
 </script>
 
 <template>
-  <div
-    class="relative flex justify-center items-center mx-auto hover:cursor-pointer"
-    
-  >
-
-    <!-- pozadina gumba -->
+  <div class="relative flex justify-center items-center mx-auto">
+    <!-- Krug sa hover efektom koji ga samo potamni -->
     <div
-      class="w-[30vw] h-[30vw] 2xl:w-[20vw] 2xl:h-[20vw] rounded-full 
-             bg-gradient-to-b from-sky-200 to-sky-400 shadow-lg 
-             hover:cursor-pointer hover:scale-105 transition duration-300"
+      class="w-[22vw] h-[22vw] 2xl:w-[16vw] 2xl:h-[16vw] rounded-full
+             bg-[radial-gradient(circle,_#c4eafe,_#38bdf8)]
+             shadow-lg flex items-center justify-center
+             hover:cursor-pointer transition-all duration-200
+             hover:brightness-90"
+      @click="isCounting ? cancelTimer() : startTimer()"
     >
-      <span class="pi pi-microphone" style="color: white; font-size: 12vw; position: center;" ></span>
+      <!-- Mikrofon -->
+      <span
+        v-if="!isCounting"
+        class="pi pi-microphone text-white"
+        style="font-size: 9vw;"
+      ></span>
+
+      <!-- X za prekid -->
+      <span
+        v-else
+        class="text-white"
+        style="font-size: 9vw;"
+        @click.stop="cancelTimer"
+      >
+        ✖
+      </span>
     </div>
 
-    <!-- plava kružnica (progress ring) -->
+    <!-- Progress ring -->
     <svg
-      class="absolute w-full h-full -rotate-90"
+      v-if="isCounting"
+      class="absolute w-full h-full -rotate-90 pointer-events-none"
       viewBox="0 0 100 100"
-      xmlns="http://www.w3.org/2000/svg"
     >
       <circle
         cx="50"
@@ -104,22 +138,8 @@ const generateTopic = async () => {
         class="transition-all duration-100"
       />
     </svg>
-
-    
-
-    <button
-      v-if="showCancel"
-      @click.stop="cancelTimer"
-      class="absolute bottom-[-15%] w-16 h-16 rounded-full bg-red-600 shadow-lg
-             hover:bg-red-700 transition text-white text-3xl flex items-center justify-center"
-    >
-      ✖
-    </button>
   </div>
 </template>
 
 <style scoped>
-div {
-  border: solid 1px black;
-}
 </style>

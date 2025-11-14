@@ -19,7 +19,7 @@ const teamSet = ref([
 
 <template>
   <div class="min-h-screen flex flex-col bg-main">
-    <!-- HEADER s navigacijom iznad loga -->
+  
     <header class="relative bg-card">
       <div class="max-w-6xl mx-auto px-6 pt-28 pb-20 sm:pt-32 sm:pb-24 flex flex-col items-center">
        <nav class="absolute inset-x-0 top-0 flex justify-end px-6 sm:px-10 py-4 z-10">
@@ -34,7 +34,7 @@ const teamSet = ref([
           class="w-28 h-28 sm:w-40 sm:h-40 mb-8"
         />
 
-        <!-- Naslov + opis (centrirano) -->
+        <!-- Naslov + opis -->
         <div class="text-center max-w-2xl">
           <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-dark">
             DailySpeakUp
@@ -103,7 +103,6 @@ const teamSet = ref([
       </div>
     </section>
 
-    <!-- (donji CTA maknut) -->
 
     <!-- FOOTER TEAM -->
     <footer v-if="isHome" class="bg-accent border-t border-light py-10">

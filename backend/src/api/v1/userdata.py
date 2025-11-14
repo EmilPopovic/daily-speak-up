@@ -1,13 +1,13 @@
-from fastapi import APIRouter, FastAPI, File, UploadFile, HTTPException, Depends, status
-from ..deps import get_session
-from ...models import User, Interest, UserInterest
+from fastapi import APIRouter, FastAPI, HTTPException, Depends, status
+from ..deps import get_session, get_gemini_service
+from ...models import User, Interest, UserInterest, AppLang
 from ...schemas import UsernameData, EmailData, InterestData
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from ...db import get_db
 from fastapi.responses import JSONResponse
 from supertokens_python.recipe.session import SessionContainer 
-
+from ...services.gemini_service import GeminiService
+import random
 
 router = APIRouter(prefix="/userdata", tags=["UserData"])
 
@@ -167,3 +167,59 @@ async def set_interests(
             'unadded_interests': unadded_interests
          }
       )
+
+@router.get("/topic", response_class=JSONResponse)
+async def get_speaking_topic(
+   db: Session = Depends(get_db),
+   session: SessionContainer = Depends(get_session),
+   gemini_service: GeminiService = Depends(get_gemini_service)
+):
+   supertokens_user_id = session.get_user_id()
+
+   user: User | None = db.query(User).filter(
+      User.supertokens_user_id == supertokens_user_id
+   ).first()
+
+   if user is None:
+      raise HTTPException(
+         status_code=status.HTTP_404_NOT_FOUND, 
+         detail="User not found"
+      ) 
+   
+   user_interests: list[UserInterest] = db.query(UserInterest).filter(
+      UserInterest.user_id == user.id
+   ).all()
+
+   if not user_interests:
+      raise HTTPException(
+         status_code=status.HTTP_400_BAD_REQUEST,
+         detail="User has no interests selected"
+      )
+
+   interests_list : list[str] = []
+
+   for user_interest in user_interests:
+      interest_category: Interest | None = db.query(Interest).filter(
+         Interest.id == user_interest.interest_id
+      ).first()
+
+      if interest_category:
+         interests_list.append(interest_category.name)
+
+   interest = random.choice(interests_list)
+
+   try:
+      topic = await gemini_service.generate_topic(interest, user.preferred_lang)
+   except Exception as e:
+      raise HTTPException(
+         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+         detail=f"Error generating interest & topic: {str(e)}"
+      )
+   
+   return JSONResponse(
+      status_code=status.HTTP_200_OK,
+      content={
+         "interest": interest,
+         "topic": topic
+      }
+   )
