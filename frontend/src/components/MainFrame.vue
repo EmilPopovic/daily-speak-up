@@ -1,37 +1,60 @@
 <script setup lang="ts">
-    import NavBar from './NavBar.vue';
-    import RecordButton from './RecordButton.vue';
-    import Fieldset from 'primevue/fieldset';
+import { ref } from "vue";
+import NavBar from "./NavBar.vue";
+import RecordButton from "./RecordButton.vue";
+import Fieldset from "primevue/fieldset";
+
+const topic = ref<string | null>(null);
+
+// privremeno hardkodirano – kasnije možeš spojiti na prave vrijednosti
+const interes = ref<string>("public speaking");
+const lang = ref<string>("hr");
+
+const handleTopicGenerated = (tema: string, generatedLang: string) => {
+  console.log("[Page] topic-generated event:", tema, generatedLang);
+  topic.value = tema;
+  // lang.value = generatedLang; // ako želiš
+};
 </script>
 
 <template>
-  <div class="flex flex-col justify-start items-center bg-sky-100 w-[100vw] h-[60vh] lg:w-[65%] lg:h-full">
-    
+  <div
+    class="flex flex-col justify-start items-center bg-sky-100 w-[100vw] h-[60vh] lg:w-[65%] lg:h-full"
+  >
     <NavBar />
 
-    <div class="w-full h-[53vh] lg:h-full flex flex-col justify-around items-center ">
-
-      <div class="border-black justify-center
-                  font-sans text-[1.5vw] font-semibold text-center">
+    <div
+      class="w-full h-[53vh] lg:h-full flex flex-col justify-around items-center "
+    >
+      <div
+        class="border-black justify-center
+                font-sans text-[1.5vw] font-semibold text-center"
+      >
         <h1>Start practicing!</h1>
       </div>
 
       <div class="my-[5vh]">
-        <RecordButton />
+        <RecordButton
+          :interes="interes"
+          :lang="lang"
+          @topic-generated="handleTopicGenerated"
+        />
       </div>
 
       <div>
         <Fieldset legend="Tema za govor" :toggleable="true">
-          <p class="m-0">
-              Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb za snimanje.
+          <p class="m-0" v-if="topic">
+            {{ topic }}
+          </p>
+          <p class="m-0" v-else>
+            Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb
+            za snimanje.
           </p>
         </Fieldset>
       </div>
-
     </div>
   </div>
 </template>
 
 <style scoped>
-
 </style>

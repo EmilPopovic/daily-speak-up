@@ -1,6 +1,18 @@
 <script setup>
 import { ref, onBeforeUnmount } from "vue";
-import { useRouter } from "vue-router";
+
+const props = defineProps({
+  interes: {
+    type: String,
+    default: "",
+  },
+  lang: {
+    type: String,
+    default: "hr",
+  },
+});
+
+const emit = defineEmits(["topic-generated"]);
 
 const progress = ref(0);
 const isCounting = ref(false);
@@ -8,11 +20,12 @@ const isCounting = ref(false);
 let intervalId = null;
 const DURATION = 10_000;
 
-const router = useRouter();
+const BACKEND_URL = "http://localhost:8123/api/v1/topics/generate";
 
 const startTimer = () => {
   if (isCounting.value) return;
 
+  console.log("[RecordButton] startTimer");
   isCounting.value = true;
   progress.value = 0;
   const start = Date.now();
@@ -22,6 +35,7 @@ const startTimer = () => {
     progress.value = Math.min(1, elapsed / DURATION);
 
     if (elapsed >= DURATION) {
+      console.log("[RecordButton] timer finished, calling generateTopic");
       clearInterval(intervalId);
       intervalId = null;
       progress.value = 1;
@@ -33,6 +47,7 @@ const startTimer = () => {
 };
 
 const cancelTimer = () => {
+  console.log("[RecordButton] cancelTimer");
   if (intervalId !== null) {
     clearInterval(intervalId);
     intervalId = null;
@@ -46,34 +61,45 @@ onBeforeUnmount(() => {
 });
 
 const generateTopic = async () => {
+  console.log("[RecordButton] generateTopic START", {
+    interes: props.interes,
+    lang: props.lang,
+  });
+
   try {
     const response = await fetch(BACKEND_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        interes: interes.value,
-        lang: lang.value,
+        interes: props.interes,
+        lang: props.lang,
       }),
     });
 
-    if (!response.ok) throw new Error(`Greška: ${response.status}`);
+    console.log("[RecordButton] response status:", response.status);
+
+    if (!response.ok) {
+      // i u slučaju greške emitiramo nešto
+      const msg = `Greška s backenda: ${response.status}`;
+      console.error("[RecordButton]", msg);
+      emit("topic-generated", msg, props.lang);
+      return;
+    }
 
     const data = await response.json();
+    console.log("[RecordButton] data from backend:", data);
 
-    router.push({
-      name: "topics",
-      query: { tema: data.tema, lang: data.lang },
-    });
-
+    emit("topic-generated", data.tema ?? "Nema teme u odgovoru", data.lang ?? props.lang);
   } catch (error) {
-    console.error("Greška pri pozivu /topics/generate:", error);
+    console.error("[RecordButton] fetch error:", error);
+    // čak i ako fetch pukne, prikaži poruku u Fieldsetu
+    emit("topic-generated", "Greška pri pozivu /topics/generate", props.lang);
   }
 };
 </script>
 
 <template>
   <div class="relative flex justify-center items-center mx-auto">
-
     <!-- Krug sa hover efektom koji ga samo potamni -->
     <div
       class="w-[22vw] h-[22vw] 2xl:w-[16vw] 2xl:h-[16vw] rounded-full
