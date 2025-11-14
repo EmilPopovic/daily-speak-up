@@ -1,4 +1,4 @@
-from fastapi import APIRouter, FastAPI, File, UploadFile, HTTPException, Depends, status
+from fastapi import APIRouter, FastAPI, HTTPException, Depends, status
 from ..deps import get_session
 from ...models import User, Interest, UserInterest
 from ...schemas import UsernameData, EmailData, InterestData
@@ -7,7 +7,9 @@ from sqlalchemy.orm import Session
 from ...db import get_db
 from fastapi.responses import JSONResponse
 from supertokens_python.recipe.session import SessionContainer 
-
+from ..config import get_settings
+import random
+import httpx
 
 router = APIRouter(prefix="/userdata", tags=["UserData"])
 
@@ -168,8 +170,8 @@ async def set_interests(
          }
       )
 
-@router.get("/interests", response_class=JSONResponse)
-async def get_interests(
+@router.get("/topic", response_class=JSONResponse)
+async def get_speaking_topic(
    db: Session = Depends(get_db),
    session: SessionContainer = Depends(get_session)
 ):
@@ -189,6 +191,12 @@ async def get_interests(
       UserInterest.user_id == user.id
    ).all()
 
+   if not user_interests:
+      raise HTTPException(
+         status_code=status.HTTP_400_BAD_REQUEST,
+         detail="User has no interests selected"
+      )
+
    interests_list : list[str] = []
 
    for user_interest in user_interests:
@@ -199,9 +207,29 @@ async def get_interests(
       if interest_category:
          interests_list.append(interest_category.name)
 
+   interest = random.choice(interests_list)
+
+   print(f"{get_settings().api_domain}/api/v1/topics/generate")
+
+   async with httpx.AsyncClient(timeout=10.0) as client:
+      try:
+         response = await client.post(
+            f"{get_settings().api_domain}/api/v1/topics/generate",
+            json={"interes": interest, "lang": "hr"},
+            headers={"Authorization": f"Bearer {session.get_access_token()}"}
+         )
+         response.raise_for_status()
+      except httpx.HTTPError as e:
+         raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail=f"Error generating interest & topic: {str(e)}"
+         )
+   
+   topic_data = response.json()
    return JSONResponse(
       status_code=status.HTTP_200_OK,
       content={
-         'interests': interests_list
+         "interest": interest,
+         "topic": topic_data.get("tema")
       }
    )
