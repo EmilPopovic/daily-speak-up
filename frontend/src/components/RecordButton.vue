@@ -20,7 +20,7 @@ const isCounting = ref(false);
 let intervalId = null;
 const DURATION = 10_000;
 
-const BACKEND_URL = "http://localhost:8123/api/v1/topics/generate";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const startTimer = () => {
   if (isCounting.value) return;
@@ -67,16 +67,9 @@ const generateTopic = async () => {
   });
 
   try {
-    const response = await fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        interes: props.interes,
-        lang: props.lang,
-      }),
-    });
+    const response = await fetch(`${API_BASE_URL}/userdata/topic`);
 
-    console.log("[RecordButton] response status:", response.status);
+    console.log("[RecordButton] response status:", response);
 
     if (!response.ok) {
       // i u slučaju greške emitiramo nešto
@@ -89,11 +82,11 @@ const generateTopic = async () => {
     const data = await response.json();
     console.log("[RecordButton] data from backend:", data);
 
-    emit("topic-generated", data.tema ?? "Nema teme u odgovoru", data.lang ?? props.lang);
+    emit("topic-generated", data.interest ?? "Nije odabran interes", data.topic ?? "Nema teme u odgovoru", data.lang ?? props.lang);
   } catch (error) {
     console.error("[RecordButton] fetch error:", error);
     // čak i ako fetch pukne, prikaži poruku u Fieldsetu
-    emit("topic-generated", "Greška pri pozivu /topics/generate", props.lang);
+    emit("topic-generated", props.interes, "🫣 Oops! Trenutni AI servis je preopterećen. Pokušaj ponovno za 1 minutu.", props.lang);
   }
 };
 </script>

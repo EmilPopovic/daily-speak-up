@@ -1,31 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import NavBar from "./NavBar.vue";
 import RecordButton from "./RecordButton.vue";
 import Fieldset from "primevue/fieldset";
  
 const topic = ref<string | null>(null);
-const interest = ref<string>("public speaking");
+const interest = ref<string>("");
 const lang = ref<string>("hr");
 
 
-onMounted(async () => {
-  try {
-    const res = await fetch("http://localhost:8123/api/v1/userdata/interests");
-    const data = await res.json();
-    const randomIndex = Math.floor(Math.random() * data.interests.length);
-    interest.value = data.interests[randomIndex];
-    console.log("[MainFrame] fetched interests:", interest.value);
-  } catch (error) {
-    console.error("[MainFrame] failed to fetch interests:", error);
-  }
-});
-
-// privremeno hardkodirano – kasnije možeš spojiti na prave vrijednosti
-
-const handleTopicGenerated = (tema: string, generatedLang: string) => {
+const handleTopicGenerated = (interes: string, tema: string, generatedLang: string) => {
   console.log("[Page] topic-generated event:", tema, generatedLang);
   topic.value = tema;
+  interest.value = interes
   // lang.value = generatedLang; // ako želiš
 };
 </script>
@@ -56,11 +43,14 @@ const handleTopicGenerated = (tema: string, generatedLang: string) => {
 
       <div>
         <Fieldset legend="Tema za govor" :toggleable="true">
+          <p class="m-0 font-bold" v-if="interest">
+            Interes: {{ interest }}
+          </p>
           <p class="m-0" v-if="topic">
             {{ topic }}
           </p>
           <p class="m-0" v-else>
-            Vaša će se tema za govor ovdje pojaviti nakon što pritisnete gumb
+            Vaša će se tema za govor pojaviti ovdje nakon što pritisnete gumb
             za snimanje.
           </p>
         </Fieldset>
