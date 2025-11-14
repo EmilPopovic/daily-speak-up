@@ -49,7 +49,7 @@ const router = createRouter({
 
 async function isOnboardingComplete(): Promise<boolean | null> {
   try {
-    const apiDomain = import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123';
+    const apiDomain = import.meta.env.VITE_API_DOMAIN || (window as any).ENV?.VITE_API_DOMAIN || 'http://localhost:8123';
     const response = await fetch(`${apiDomain}/api/v1/user/me`, {
       credentials: 'include',
       headers: {
