@@ -80,7 +80,7 @@ const generateTopic = async () => {
 
     if (!response.ok) {
       // i u slučaju greške emitiramo nešto
-      const msg = `Greška s backenda: ${response.status}`;
+      const msg = "🫣 Oops! Trenutni AI servis je preopterećen. Pokušaj ponovno za 1 minutu.";
       console.error("[RecordButton]", msg);
       emit("topic-generated", msg, props.lang);
       return;
