@@ -16,14 +16,12 @@
         <Drawer v-model:visible="visible" header="Account Information" position="right" 
                 :dismissable="false" class="!w-full lg:!w-[35vw]">
             <User />
-            
+
             <div class="flex flex-col justify-start items-stretch">
-                <p class="yMargin">Current user's status: logged out</p>
-                <ul class="yMargin">
+                <!--<ul class="yMargin">
                     <li><RouterLink to="/about">O nama</RouterLink></li>
-                </ul>
-                <Login class="yMargin" />
-                <Logout class="yMargin" />
+                </ul>-->
+                <Logout class="mt-10" />
             </div>
         </Drawer>
         <div class="flex flex-col justify-center items-center border-2 border-solid aspect-square
