@@ -48,7 +48,7 @@ export default {
         userId.value = await getUserId();
 
         // Fetch user data from backend API
-        const response = await fetch(`${import.meta.env.VITE_API_DOMAIN || 'http://localhost:8123'}/api/v1/user/me`, {
+        const response = await fetch(`${import.meta.env.VITE_API_DOMAIN || window.ENV?.VITE_API_DOMAIN || 'http://localhost:8123'}/api/v1/user/me`, {
           method: 'GET',
           credentials: 'include', // Important: Include cookies for SuperTokens session
           headers: {
