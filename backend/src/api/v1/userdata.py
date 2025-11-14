@@ -167,3 +167,41 @@ async def set_interests(
             'unadded_interests': unadded_interests
          }
       )
+
+@router.get("/interests", response_class=JSONResponse)
+async def get_interests(
+   db: Session = Depends(get_db),
+   session: SessionContainer = Depends(get_session)
+):
+   supertokens_user_id = session.get_user_id()
+
+   user: User | None = db.query(User).filter(
+      User.supertokens_user_id == supertokens_user_id
+   ).first()
+
+   if user is None:
+      raise HTTPException(
+         status_code=status.HTTP_404_NOT_FOUND, 
+         detail="User not found"
+      ) 
+   
+   user_interests: list[UserInterest] = db.query(UserInterest).filter(
+      UserInterest.user_id == user.id
+   ).all()
+
+   interests_list : list[str] = []
+
+   for user_interest in user_interests:
+      interest_category: Interest | None = db.query(Interest).filter(
+         Interest.id == user_interest.interest_id
+      ).first()
+
+      if interest_category:
+         interests_list.append(interest_category.name)
+
+   return JSONResponse(
+      status_code=status.HTTP_200_OK,
+      content={
+         'interests': interests_list
+      }
+   )
