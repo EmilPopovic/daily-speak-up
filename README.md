@@ -18,6 +18,30 @@ DailySpeakUp pruža pristupačno, gamificirano rješenje koje omogućava svakodn
 * [Lara Desnica](https://github.com/LaraDesnica) - dokumentacije
 * [Nika Valić](https://github.com/wavetoc520) - UI/UX
 
+## Osnovne informacije i korištenje
+
+Aplikacija je dostupna na [dailyspeak.app](https://dailyspeak.app).
+
+### Registracija i prijava
+
+Za korištenje je potreban pristup Google računu ili bilo kojoj drugoj mail adresi. U sustav se prijavljuje klikom na gumb "Log in" na početnoj stranici, nakon čega se otvara _modal_ za prijavu. Prijava putem Googlea prijavljuje korisnika odmah nakon Googleove potvrde. Ako se koristi druga email adresa, bit će poslan mail s linkom (gumbom) za prijavu.
+
+Novom se korisniku nakon registracije šalje mail dobrodošlice na odabranu adresu. To znači da je račun uspješno kreiran.
+
+Unutar aplikacije, prijavljeni se korisnik može odjaviti klikom na ikonu korisnika (gore desno u navigacijskoj traci), te potom klikom na gumb "Log out".
+
+### Onboarding
+
+Nakon registracije, korisnik prolazi onboarding - bira ime koje se prikazuje u aplikaciji (_display name_), jedinstvenu oznaku korisnika (_handle_) te interese.
+
+Prijavljeni korisnik nema pristup ostatku aplikacije dok nije prošao onboarding.
+
+### Generiranje teme
+
+Prijavljeni korisnik klikom na gumb na početnoj stranici generira temu za svoj govor. Ako je slučajno kliknuo na gumb, unutar određenog vremena ga može opet stisnuti kako bi otkazao generiranje teme.
+
+Tema je temeljena na nasumično izabranom interesu tog korisnika, a prikazuje se u polju teme na dnu početne stranice.
+
 ## Tehnologije
 
 ### Tech stack
