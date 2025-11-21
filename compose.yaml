@@ -2,8 +2,25 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"   
+      - "5672:5672"
       - "15672:15672"
+    networks:
+      - internal
+
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-dailyspeakup}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - internal
 
@@ -15,6 +32,9 @@ services:
       POSTGRESQL_CONNECTION_URI: "${SUPERTOKENS_DATABASE_URL}"
       API_KEYS: "${SUPERTOKENS_API_KEY}"
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: >
         bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
@@ -29,7 +49,7 @@ services:
       context: backend
       dockerfile: Dockerfile
     ports:
-      - 8123:8123
+      - "8123:8123"
     restart: unless-stopped
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-dev}
@@ -55,6 +75,8 @@ services:
     depends_on:
       supertokens:
         condition: service_healthy
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8123/api/v1/health"]
       interval: 30s
@@ -79,7 +101,7 @@ services:
         - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:8123/api/v1}
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - "3000:3000"
     depends_on:
       backend:
         condition: service_healthy
@@ -106,6 +128,7 @@ services:
       - backend
       - rabbitmq
       - supertokens
+      - postgres
     environment:
       - ENVIRONMENT=${ENVIRONMENT:-dev}
       - DATABASE_URL=${DATABASE_URL}
@@ -132,3 +155,6 @@ services:
 
 networks:
   internal:
+
+volumes:
+  postgres_data:
