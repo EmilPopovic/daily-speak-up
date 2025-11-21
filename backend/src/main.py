@@ -17,7 +17,7 @@ from .api.v1 import (
 )
 from .services.supertokens_service import init_supertokens
 from .api.config import get_settings
-from .db_manager import seed_default_interests
+from .db_manager import create_all_tables
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
     """Lifespan events"""
     try:
         logger.info("Running startup tasks...")
-        seed_default_interests()
+        create_all_tables()
         logger.info("Startup tasks completed successfully")
     except Exception as e:
         logger.error(f"Error during startup: {e}")
